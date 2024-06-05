@@ -254,15 +254,15 @@ static const struct SpriteTemplate sSpriteTemplate_Selector =
 };
 
 // Begin Generic UI Initialization Code
-void Task_OpenStatEditorFromStartMenu(u8 taskId)
-{
-    if (!gPaletteFade.active)
-    {
-        CleanupOverworldWindowsAndTilemaps();
-        StatEditor_Init(CB2_ReturnToFieldWithOpenMenu);
-        DestroyTask(taskId);
-    }
-}
+// void Task_OpenStatEditorFromStartMenu(u8 taskId)
+// {
+//     if (!gPaletteFade.active)
+//     {
+//         CleanupOverworldWindowsAndTilemaps();
+//         StatEditor_Init(CB2_ReturnToFieldWithOpenMenu);
+//         DestroyTask(taskId);
+//     }
+// }
 
 void Task_OpenToEditIV(u8 taskId)
 {
@@ -277,7 +277,6 @@ void Task_OpenToEditEV(u8 taskId)
 {
     if (!gPaletteFade.active)
     {
-        //sStatEditorDataPtr->selector_x = 0;
         CleanupOverworldWindowsAndTilemaps();
         StatEditor_Init(CB2_ReturnToFieldWithOpenMenu);
         DestroyTask(taskId);
@@ -736,10 +735,10 @@ static void PrintMonStats()
     }
     //SP DEFENSE
     if(nature==NATURE_CALM || nature==NATURE_GENTLE ||nature==NATURE_SASSY ||nature==NATURE_CAREFUL){
-        AddTextPrinterParameterized4(WINDOW_2, FONT_NARROW, 18, STARTING_Y + (DISTANCE_BETWEEN_STATS_Y * 4), 0, 0, sMenuWindowFontColors[FONT_RED], 0xFF, sText_MenuSpDefensePlus);
+        AddTextPrinterParameterized4(WINDOW_2, FONT_NARROW, 8, STARTING_Y + (DISTANCE_BETWEEN_STATS_Y * 4), 0, 0, sMenuWindowFontColors[FONT_RED], 0xFF, sText_MenuSpDefensePlus);
     }else if (nature==NATURE_NAUGHTY || nature==NATURE_LAX ||nature==NATURE_NAIVE ||nature==NATURE_RASH)
     {
-        AddTextPrinterParameterized4(WINDOW_2, FONT_NARROW, 18, STARTING_Y + (DISTANCE_BETWEEN_STATS_Y * 4), 0, 0, sMenuWindowFontColors[FONT_BLUE], 0xFF, sText_MenuSpDefenseMinus);
+        AddTextPrinterParameterized4(WINDOW_2, FONT_NARROW, 8, STARTING_Y + (DISTANCE_BETWEEN_STATS_Y * 4), 0, 0, sMenuWindowFontColors[FONT_BLUE], 0xFF, sText_MenuSpDefenseMinus);
     }else{
         AddTextPrinterParameterized4(WINDOW_2, FONT_NARROW, 12, STARTING_Y + (DISTANCE_BETWEEN_STATS_Y * 4), 0, 0, sMenuWindowFontColors[FONT_WHITE], 0xFF, sText_MenuSpDefense);
     }
