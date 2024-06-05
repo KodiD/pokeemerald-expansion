@@ -116,6 +116,7 @@ SECTIONS {
         src/battle_ai_switch_items.o(.text);
         src/battle_controller_link_opponent.o(.text);
         src/battle_debug.o(.text);
+        src/extraop.o(.text);
         src/pokemon.o(.text);
         src/trig.o(.text);
         src/random.o(.text);
@@ -357,6 +358,7 @@ SECTIONS {
         src/gym_leader_rematch.o(.text);
         src/battle_transition_frontier.o(.text);
         src/international_string_util.o(.text);
+        src/ui_stat_editor.o(.text);
         src/pokemon_debug.o(.text);
         src/expansion_intro.o(.text);
     } > ROM =0
@@ -508,6 +510,7 @@ SECTIONS {
         src/battle_ai_switch_items.o(.rodata);
         src/battle_controller_link_opponent.o(.rodata);
         src/battle_debug.o(.rodata);
+        src/extraop.o(.rodata);
         src/pokemon.o(.rodata);
         src/trig.o(.rodata);
         src/util.o(.rodata);
@@ -724,6 +727,7 @@ SECTIONS {
         data/mystery_gift.o(.rodata);
         src/m4a_tables.o(.rodata);
         data/sound_data.o(.rodata);
+        src/ui_stat_editor.o(.rodata);
         src/pokemon_debug.o(.rodata);
         src/expansion_intro.o(.rodata);
     } > ROM =0

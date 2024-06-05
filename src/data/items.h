@@ -11131,6 +11131,20 @@ const struct Item gItemsInfo[] =
         .fieldUseFunc = ItemUseOutOfBattle_CoinCase,
     },
 
+    [ITEM_REPEL_CHARM] =
+    {
+        .name = _("Repel Charm"),
+        .price = 0,
+        .description = COMPOUND_STRING(
+            "A Charm that\n"
+            "repels Pokémon if\n"
+            "it is used."),
+        .importance = 1,
+        .pocket = POCKET_KEY_ITEMS,
+        .type = ITEM_USE_BAG_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_RepelCharm,
+    },
+
     [ITEM_POWDER_JAR] =
     {
         .name = _("Powder Jar"),

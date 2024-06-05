@@ -7,6 +7,7 @@ InsideOfTruck_OnLoad:
 	setmetatile 4, 1, METATILE_InsideOfTruck_ExitLight_Top, FALSE
 	setmetatile 4, 2, METATILE_InsideOfTruck_ExitLight_Mid, FALSE
 	setmetatile 4, 3, METATILE_InsideOfTruck_ExitLight_Bottom, FALSE
+	setvar VAR_HEALINGCHARGE_0x40F7, 1
 	end
 
 InsideOfTruck_OnResume:

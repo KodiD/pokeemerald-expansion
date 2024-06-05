@@ -432,3 +432,44 @@ Debug_EventScript_InflictStatus1_Text_Frostbite:
 	.string "Frostbite$"
 
 .endif
+
+ExtraOp_EventScript_EXP_On::
+	msgbox ExpGainText_On, MSGBOX_DEFAULT
+	waitmessage
+	release
+	end
+
+ExpGainText_On:
+	.string "EXP. Gain is turned on.$"
+
+ExtraOp_EventScript_EXP_Off::
+	msgbox ExpGainText_Off, MSGBOX_DEFAULT
+	waitmessage
+	release
+	end
+
+ExpGainText_Off:
+	.string "EXP. Gain is turned off.$"
+
+ExtraOp_EventScript_HealingNoCharge::
+	msgbox NoHealingText, MSGBOX_DEFAULT
+	waitmessage
+	release
+	end
+
+ExtraOp_EventScript_HealingStone::
+	
+	buffernumberstring STR_VAR_1, VAR_HEALINGCHARGE_0x40F7
+	msgbox RemainingChargesText, MSGBOX_DEFAULT
+	waitmessage
+	release
+	end
+
+NoHealingText:
+	.string "You do not have enough charges.$"
+
+
+RemainingChargesText:
+	.string "Your Party was Healed!\n" 
+	.string "You have {STR_VAR_1} charges left. $"
+

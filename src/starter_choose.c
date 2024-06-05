@@ -24,7 +24,7 @@
 #include "constants/songs.h"
 #include "constants/rgb.h"
 
-#define STARTER_MON_COUNT   3
+#define STARTER_MON_COUNT   6
 
 // Position of the sprite of the selected starter Pokémon
 #define STARTER_PKMN_POS_X (DISPLAY_WIDTH / 2)
@@ -101,10 +101,16 @@ static const u8 sPokeballCoords[STARTER_MON_COUNT][2] =
     {60, 64},
     {120, 88},
     {180, 64},
+    {60, 64},
+    {120, 88},
+    {180, 64},
 };
 
 static const u8 sStarterLabelCoords[STARTER_MON_COUNT][2] =
 {
+    {0, 9},
+    {16, 10},
+    {8, 4},
     {0, 9},
     {16, 10},
     {8, 4},
@@ -115,6 +121,9 @@ static const u16 sStarterMon[STARTER_MON_COUNT] =
     SPECIES_TREECKO,
     SPECIES_TORCHIC,
     SPECIES_MUDKIP,
+    SPECIES_SPRIGATITO,
+    SPECIES_FUECOCO,
+    SPECIES_QUAXLY,
 };
 
 static const struct BgTemplate sBgTemplates[3] =
@@ -203,6 +212,9 @@ static const struct OamData sOam_StarterCircle =
 
 static const u8 sCursorCoords[][2] =
 {
+    {60, 32},
+    {120, 56},
+    {180, 32},
     {60, 32},
     {120, 56},
     {180, 32},

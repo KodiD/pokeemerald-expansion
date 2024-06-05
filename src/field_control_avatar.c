@@ -4,6 +4,7 @@
 #include "coord_event_weather.h"
 #include "daycare.h"
 #include "debug.h"
+#include "extraop.h"
 #include "faraway_island.h"
 #include "event_data.h"
 #include "event_object_movement.h"
@@ -134,6 +135,11 @@ void FieldGetPlayerInput(struct FieldInput *input, u16 newKeys, u16 heldKeys)
     else if (heldKeys & DPAD_RIGHT)
         input->dpadDirection = DIR_EAST;
 
+    if (heldKeys & L_BUTTON)
+    {
+        input->input_field_1_3 = TRUE;
+    }
+
 #if DEBUG_OVERWORLD_MENU == TRUE && DEBUG_OVERWORLD_IN_MENU == FALSE
     if ((heldKeys & DEBUG_OVERWORLD_HELD_KEYS) && input->DEBUG_OVERWORLD_TRIGGER_EVENT)
     {
@@ -209,6 +215,14 @@ int ProcessPlayerFieldInput(struct FieldInput *input)
         return TRUE;
     }
 #endif
+
+    if(input->input_field_1_3)
+    {
+        PlaySE(SE_WIN_OPEN);
+        ExtraOp_ShowMainMenu();
+        input->input_field_1_3 = FALSE;
+        return TRUE;
+    }
 
     return FALSE;
 }

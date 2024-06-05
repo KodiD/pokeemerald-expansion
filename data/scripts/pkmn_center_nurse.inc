@@ -40,6 +40,7 @@ EventScript_PkmnCenterNurse_TakeAndHealPkmn::
 	applymovement VAR_0x800B, Common_Movement_WalkInPlaceFasterDown
 	waitmovement 0
 	special HealPlayerParty
+	setvar VAR_HEALINGCHARGE_0x40F7, OW_HEALINGMAXCHARGE
 	return
 
 EventScript_PkmnCenterNurse_CheckTrainerHillAndUnionRoom::
