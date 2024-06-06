@@ -1442,6 +1442,21 @@ void Task_UseHoneyOnField(u8 taskId)
     DestroyTask(taskId);
 }
 
+void ItemUseOutOfBattle_EVStone(u8 taskId){
+    gItemUseCB = ItemUseCB_EVStone;
+    SetUpItemUseCallback(taskId);
+}
+
+void ItemUseOutOfBattle_IVStone(u8 taskId){
+    gItemUseCB = ItemUseCB_IVStone;
+    SetUpItemUseCallback(taskId);
+}
+
+void ItemUseOutOfBattle_LevelStone(u8 taskId){
+    gItemUseCB = ItemUseCB_LevelStone;
+    SetUpItemUseCallback(taskId);
+}
+
 static void ItemUseOnFieldCB_Honey(u8 taskId)
 {
     Overworld_ResetStateAfterDigEscRope();

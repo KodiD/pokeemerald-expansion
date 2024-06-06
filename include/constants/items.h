@@ -184,8 +184,8 @@
 #define ITEM_MAX_MUSHROOMS 132
 
 // Treasures
-#define ITEM_BOTTLE_CAP 133
-#define ITEM_GOLD_BOTTLE_CAP 134
+#define ITEM_EV_STONE 133
+#define ITEM_IV_STONE 134
 #define ITEM_NUGGET 135
 #define ITEM_BIG_NUGGET 136
 #define ITEM_TINY_MUSHROOM 137
@@ -997,12 +997,13 @@
 #define ITEM_SWAP_SNACK 825
 #define ITEM_TWICE_SPICED_RADISH 826
 #define ITEM_POKESHI_DOLL 827
-#define ITEM_REPEL_CHARM 828
+#define ITEM_REPEL_CHARM 828  // ReOrganize later
+#define ITEM_LEVEL_STONE 829  // ReOrganize later
 
 // HOPO BERRY
 // LEGEND PLATE
 
-#define ITEMS_COUNT 829
+#define ITEMS_COUNT 830
 #define ITEM_FIELD_ARROW ITEMS_COUNT
 
 // A special item id associated with "Cancel"/"Exit" etc. in a list of items or decorations

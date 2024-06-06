@@ -2234,31 +2234,31 @@ const struct Item gItemsInfo[] =
 
 // Treasures
 
-    [ITEM_BOTTLE_CAP] =
+    [ITEM_EV_STONE] =
     {
-        .name = _("Bottle Cap"),
+        .name = _("EV Stone"),
         .price = (I_PRICE >= GEN_9) ? 20000 : 5000,
         .description = COMPOUND_STRING(
             "A beautiful bottle\n"
             "cap that gives off\n"
             "a silver gleam."),
         .pocket = POCKET_ITEMS,
-        .type = ITEM_USE_BAG_MENU,
-        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+        .type = ITEM_USE_PARTY_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_EVStone,
         .flingPower = 30,
     },
 
-    [ITEM_GOLD_BOTTLE_CAP] =
+    [ITEM_IV_STONE] =
     {
-        .name = _("GoldBottlCap"),
+        .name = _("IV Stone"),
         .price = (I_PRICE >= GEN_9) ? 60000 : 10000,
         .description = COMPOUND_STRING(
             "A beautiful bottle\n"
             "cap that gives off\n"
             "a golden gleam."),
         .pocket = POCKET_ITEMS,
-        .type = ITEM_USE_BAG_MENU,
-        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+        .type = ITEM_USE_PARTY_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_IVStone,
         .flingPower = 30,
     },
 
@@ -11143,6 +11143,20 @@ const struct Item gItemsInfo[] =
         .pocket = POCKET_KEY_ITEMS,
         .type = ITEM_USE_BAG_MENU,
         .fieldUseFunc = ItemUseOutOfBattle_RepelCharm,
+    },
+
+    [ITEM_LEVEL_STONE] =
+    {
+        .name = _("Level Stone"),
+        .price = 0,
+        .description = COMPOUND_STRING(
+            "A item that is\n"
+            "used to level up\n"
+            "a Pokémon."),
+        .importance = 1,
+        .pocket = POCKET_KEY_ITEMS,
+        .type = ITEM_USE_BAG_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_LevelStone,
     },
 
     [ITEM_POWDER_JAR] =

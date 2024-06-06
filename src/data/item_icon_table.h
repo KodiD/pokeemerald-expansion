@@ -117,6 +117,7 @@ const u32 *const gItemIconTable[ITEMS_COUNT + 1][2] =
     [ITEM_EXP_CANDY_L] = {gItemIcon_ExpCandyL, gItemIconPalette_ExpCandies},
     [ITEM_EXP_CANDY_XL] = {gItemIcon_ExpCandyXL, gItemIconPalette_ExpCandies},
     [ITEM_DYNAMAX_CANDY] = {gItemIcon_DynamaxCandy, gItemIconPalette_DynamaxCandy},
+    [ITEM_LEVEL_STONE] = {gItemIcon_Eviolite, gItemIconPalette_RareCandy},
     // Medicinal Flutes
     [ITEM_BLUE_FLUTE] = {gItemIcon_Flute, gItemIconPalette_BlueFlute},
     [ITEM_YELLOW_FLUTE] = {gItemIcon_Flute, gItemIconPalette_YellowFlute},
@@ -147,8 +148,8 @@ const u32 *const gItemIconTable[ITEMS_COUNT + 1][2] =
     [ITEM_POKE_TOY] = {gItemIcon_PokeToy, gItemIconPalette_PokeToy},
     [ITEM_MAX_MUSHROOMS] = {gItemIcon_MaxMushrooms, gItemIconPalette_MaxMushrooms},
     // Treasures
-    [ITEM_BOTTLE_CAP] = {gItemIcon_BottleCap, gItemIconPalette_BottleCap},
-    [ITEM_GOLD_BOTTLE_CAP] = {gItemIcon_BottleCap, gItemIconPalette_GoldBottleCap},
+    [ITEM_EV_STONE] = {gItemIcon_BottleCap, gItemIconPalette_BottleCap},
+    [ITEM_IV_STONE] = {gItemIcon_BottleCap, gItemIconPalette_GoldBottleCap},
     [ITEM_NUGGET] = {gItemIcon_Nugget, gItemIconPalette_Nugget},
     [ITEM_BIG_NUGGET] = {gItemIcon_BigNugget, gItemIconPalette_BigNugget},
     [ITEM_TINY_MUSHROOM] = {gItemIcon_TinyMushroom, gItemIconPalette_Mushroom},

@@ -101,9 +101,9 @@ static const u8 sPokeballCoords[STARTER_MON_COUNT][2] =
     {60, 64},
     {120, 88},
     {180, 64},
-    {60, 64},
-    {120, 88},
-    {180, 64},
+    {60, 54},
+    {120, 78},
+    {180, 54},
 };
 
 static const u8 sStarterLabelCoords[STARTER_MON_COUNT][2] =
@@ -215,9 +215,9 @@ static const u8 sCursorCoords[][2] =
     {60, 32},
     {120, 56},
     {180, 32},
-    {60, 32},
-    {120, 56},
-    {180, 32},
+    {60, 22},
+    {120, 46},
+    {180, 22},
 };
 
 static const union AnimCmd sAnim_Hand[] =
@@ -470,6 +470,18 @@ void CB2_ChooseStarter(void)
     spriteId = CreateSprite(&sSpriteTemplate_Pokeball, sPokeballCoords[2][0], sPokeballCoords[2][1], 2);
     gSprites[spriteId].sTaskId = taskId;
     gSprites[spriteId].sBallId = 2;
+
+    spriteId = CreateSprite(&sSpriteTemplate_Pokeball, sPokeballCoords[3][0], sPokeballCoords[3][1], 2);
+    gSprites[spriteId].sTaskId = taskId;
+    gSprites[spriteId].sBallId = 3;
+
+    spriteId = CreateSprite(&sSpriteTemplate_Pokeball, sPokeballCoords[4][0], sPokeballCoords[4][1], 2);
+    gSprites[spriteId].sTaskId = taskId;
+    gSprites[spriteId].sBallId = 4;
+
+    spriteId = CreateSprite(&sSpriteTemplate_Pokeball, sPokeballCoords[5][0], sPokeballCoords[5][1], 2);
+    gSprites[spriteId].sTaskId = taskId;
+    gSprites[spriteId].sBallId = 5;
 
     sStarterLabelWindowId = WINDOW_NONE;
 }

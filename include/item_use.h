@@ -39,6 +39,9 @@ void ItemUseOutOfBattle_Fusion(u8);
 void ItemUseOutOfBattle_Honey(u8);
 void ItemUseOutOfBattle_CannotUse(u8);
 void ItemUseOutOfBattle_ExpShare(u8);
+void ItemUseOutOfBattle_EVStone(u8); //Organize Later?
+void ItemUseOutOfBattle_IVStone(u8); //Organize Later?
+void ItemUseOutOfBattle_LevelStone(u8); //Orgainze Later
 void ItemUseInBattle_BagMenu(u8 taskId);
 void ItemUseInBattle_PartyMenu(u8 taskId);
 void ItemUseInBattle_PartyMenuChooseMove(u8 taskId);

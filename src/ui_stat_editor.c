@@ -269,7 +269,7 @@ void Task_OpenToEditIV(u8 taskId)
     if (!gPaletteFade.active)
     {
         CleanupOverworldWindowsAndTilemaps();
-        StatEditor_InitIV(CB2_ReturnToFieldWithOpenMenu);
+        StatEditor_InitIV(CB2_ReturnToBagMenuPocket);
         DestroyTask(taskId);
     }
 }
@@ -278,7 +278,7 @@ void Task_OpenToEditEV(u8 taskId)
     if (!gPaletteFade.active)
     {
         CleanupOverworldWindowsAndTilemaps();
-        StatEditor_Init(CB2_ReturnToFieldWithOpenMenu);
+        StatEditor_Init(CB2_ReturnToBagMenuPocket);
         DestroyTask(taskId);
     }
 }
@@ -717,19 +717,19 @@ static void PrintMonStats()
     }
     //Defense
     if(nature==NATURE_BOLD || nature==NATURE_RELAXED ||nature==NATURE_IMPISH ||nature==NATURE_LAX){
-        AddTextPrinterParameterized4(WINDOW_2, FONT_NARROW, 5, STARTING_Y + (DISTANCE_BETWEEN_STATS_Y * 2), 0, 0, sMenuWindowFontColors[FONT_RED], 0xFF, sText_MenuDefensePlus);
+        AddTextPrinterParameterized4(WINDOW_2, FONT_NARROW, 6, STARTING_Y + (DISTANCE_BETWEEN_STATS_Y * 2), 0, 0, sMenuWindowFontColors[FONT_RED], 0xFF, sText_MenuDefensePlus);
     }else if (nature==NATURE_LONELY || nature==NATURE_HASTY ||nature==NATURE_MILD ||nature==NATURE_GENTLE)
     {
-        AddTextPrinterParameterized4(WINDOW_2, FONT_NARROW, 5, STARTING_Y + (DISTANCE_BETWEEN_STATS_Y * 2), 0, 0, sMenuWindowFontColors[FONT_BLUE], 0xFF, sText_MenuDefenseMinus);
+        AddTextPrinterParameterized4(WINDOW_2, FONT_NARROW, 6, STARTING_Y + (DISTANCE_BETWEEN_STATS_Y * 2), 0, 0, sMenuWindowFontColors[FONT_BLUE], 0xFF, sText_MenuDefenseMinus);
     }else{
         AddTextPrinterParameterized4(WINDOW_2, FONT_NARROW, 12, STARTING_Y + (DISTANCE_BETWEEN_STATS_Y * 2), 0, 0, sMenuWindowFontColors[FONT_WHITE], 0xFF, sText_MenuDefense);    
     }
     //SP ATTACK
     if(nature==NATURE_MODEST || nature==NATURE_MILD ||nature==NATURE_QUIET ||nature==NATURE_RASH){
-        AddTextPrinterParameterized4(WINDOW_2, FONT_NARROW, 6, STARTING_Y + (DISTANCE_BETWEEN_STATS_Y * 3), 0, 0, sMenuWindowFontColors[FONT_RED], 0xFF, sText_MenuSpAttackPlus);
+        AddTextPrinterParameterized4(WINDOW_2, FONT_NARROW, 7, STARTING_Y + (DISTANCE_BETWEEN_STATS_Y * 3), 0, 0, sMenuWindowFontColors[FONT_RED], 0xFF, sText_MenuSpAttackPlus);
     }else if (nature==NATURE_ADAMANT || nature==NATURE_IMPISH ||nature==NATURE_JOLLY ||nature==NATURE_CAREFUL)
     {
-        AddTextPrinterParameterized4(WINDOW_2, FONT_NARROW, 6, STARTING_Y + (DISTANCE_BETWEEN_STATS_Y * 3), 0, 0, sMenuWindowFontColors[FONT_BLUE], 0xFF, sText_MenuSpAttackMinus);
+        AddTextPrinterParameterized4(WINDOW_2, FONT_NARROW, 7, STARTING_Y + (DISTANCE_BETWEEN_STATS_Y * 3), 0, 0, sMenuWindowFontColors[FONT_BLUE], 0xFF, sText_MenuSpAttackMinus);
     }else{
         AddTextPrinterParameterized4(WINDOW_2, FONT_NARROW, 10, STARTING_Y + (DISTANCE_BETWEEN_STATS_Y * 3), 0, 0, sMenuWindowFontColors[FONT_WHITE], 0xFF, sText_MenuSpAttack);    
     }
