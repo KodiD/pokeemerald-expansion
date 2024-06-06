@@ -98,21 +98,21 @@ static const struct WindowTemplate sWindowTemplate_StarterLabel =
 
 static const u8 sPokeballCoords[STARTER_MON_COUNT][2] =
 {
-    {60, 64},
-    {120, 88},
-    {180, 64},
     {60, 54},
-    {120, 78},
+    {83, 66},
+    {105, 78},
+    {135, 78},
+    {157, 66},
     {180, 54},
 };
 
 static const u8 sStarterLabelCoords[STARTER_MON_COUNT][2] =
 {
     {0, 9},
-    {16, 10},
-    {8, 4},
     {0, 9},
     {16, 10},
+    {16, 10},
+    {8, 4},
     {8, 4},
 };
 
@@ -212,12 +212,12 @@ static const struct OamData sOam_StarterCircle =
 
 static const u8 sCursorCoords[][2] =
 {
-    {60, 42},
-    {120, 66},
-    {180, 42},
-    {60, 22},
-    {120, 46},
-    {180, 22},
+    {60, 24},
+    {83, 36},
+    {105, 48},
+    {135, 48},
+    {157, 36},
+    {180, 24},
 };
 
 static const union AnimCmd sAnim_Hand[] =

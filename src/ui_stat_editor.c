@@ -130,8 +130,8 @@ static const struct WindowTemplate sUIStatEditorYesNoWindowTemplate =
     .tilemapTop = 9,
     .width = 5,
     .height = 4,
-    .paletteNum = 14,
-    .baseBlock = 0x2E9,
+    .paletteNum = 15,
+    .baseBlock = 0xDF,
 };
 
 static const struct WindowTemplate sMenuWindowTemplates[] = 
@@ -518,7 +518,7 @@ static void Task_StatEditorWaitFadeIn(u8 taskId)
 
 static void Task_StatEditorTurnOff(u8 taskId)
 {
-    // s16 *data = gTasks[taskId].data;
+     //s16 *data = gTasks[taskId].data;
 
     if (!gPaletteFade.active)
     {
@@ -971,6 +971,7 @@ static void Task_StatEditorMain(u8 taskId) // input control when first loaded in
     if (JOY_NEW(B_BUTTON))
     {
         PlaySE(SE_PC_OFF);
+        try_free(sBg1TilemapBuffer);
         gTasks[taskId].func = Task_CancelYesNo;
         
     }
@@ -1139,13 +1140,14 @@ static void Task_MenuEditingStat(u8 taskId) // This function should be refactore
 // }
 
 
-
-
 static void Task_CancelYesNo(u8 taskId)
 {
     if (IsPartyMenuTextPrinterActive() != TRUE)
     {
-        CreateYesNoMenu(&sUIStatEditorYesNoWindowTemplate, 0x4F, 13, 0);
+        FillWindowPixelBuffer(0, PIXEL_FILL(1));
+        AddTextPrinterParameterized(0, FONT_NORMAL, gText_ConfirmStarterChoice, 0, 1, 0, NULL);
+        ScheduleBgCopyTilemapToVram(0);
+        CreateYesNoMenu(&sUIStatEditorYesNoWindowTemplate, 0xF3, 2, 0);
         gTasks[taskId].func = Task_HandleCancelYesNoInput;
     }
 }
@@ -1163,6 +1165,7 @@ static void Task_HandleCancelYesNoInput(u8 taskId)
         // fallthrough
     case 1:
         gTasks[taskId].func = Task_StatEditorMain;
+        PrintMonStats();
         break;
     }
 }
