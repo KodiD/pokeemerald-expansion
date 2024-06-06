@@ -16,16 +16,18 @@
     xx setup level cap
     - auto switch to lowercase after first Letter
     - Create themed UI and Menus Graphics
+    - Turbo a on THE R Button
 
 ## Project to Fix:
     - Remove EV/IV Editor from extra option menu
-    - press L again to close L menu
+    x/- press L again to close L menu
     - make EXP. Gain a game option
     - Remove Debug MENU
     - Remove test items from Player PC
     x move Sp. Atk to the right by 1-2px(+1/+2)
     x move Defense to the right by 1(+1)
-    x fix broken starter choose 
+    x/- fix broken starter choose 
+    x fix Level Stone
 
 ## Project to modifiy:
     x reflavor bottle caps and make them use able with iv ev editor
@@ -34,6 +36,6 @@
     - better Control displays (Graphics) for IV/EV Editor
     - Change  Stat Editor text to EV Stone/ IV Stone respecfully
     x- make 6 pokeballs for starter selection
-    - Add a Confirmation y/n to exiting the IV/EV Editor
+    x/- Add a Confirmation y/n to exiting the IV/EV Editor
     - More char in Player name
     -

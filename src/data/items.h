@@ -11155,7 +11155,8 @@ const struct Item gItemsInfo[] =
             "a Pokémon."),
         .importance = 1,
         .pocket = POCKET_KEY_ITEMS,
-        .type = ITEM_USE_BAG_MENU,
+        .type = ITEM_USE_PARTY_MENU,
+        .effect = gItemEffect_RareCandy,
         .fieldUseFunc = ItemUseOutOfBattle_LevelStone,
     },
 

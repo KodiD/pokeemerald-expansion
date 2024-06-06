@@ -230,6 +230,7 @@ static const u16 sNewGamePCItems[][2] =
     { ITEM_EV_STONE, 20 },
     { ITEM_LEVEL_STONE, 1 },
     { ITEM_TERA_ORB, 1 },
+    { ITEM_RARE_CANDY, 200 },
     { ITEM_NONE, 0 }
 };
 

@@ -96,6 +96,9 @@ static void SelectorCallback(struct Sprite *sprite);
 static struct Pokemon *ReturnPartyMon();
 static u8 CreateSelector();
 static void DestroySelector();
+static void Task_CancelYesNo(u8);
+static void Task_HandleCancelYesNoInput(u8);
+//static void DisplayYesNoMenu(void);
 
 //==========CONST=DATA==========//
 static const struct BgTemplate sStatEditorBgTemplates[] =
@@ -104,20 +107,31 @@ static const struct BgTemplate sStatEditorBgTemplates[] =
         .bg = 0,    // windows, etc
         .charBaseIndex = 0,
         .mapBaseIndex = 30,
-        .priority = 1
+        .priority = 2
     }, 
     {
         .bg = 1,    // this bg loads the UI tilemap
         .charBaseIndex = 3,
         .mapBaseIndex = 28,
-        .priority = 2
+        .priority = 3
     },
     {
         .bg = 2,    // this bg loads the UI tilemap
         .charBaseIndex = 0,
         .mapBaseIndex = 26,
-        .priority = 0
+        .priority = 1
     }
+};
+
+static const struct WindowTemplate sUIStatEditorYesNoWindowTemplate =
+{
+    .bg = 0,
+    .tilemapLeft = 21,
+    .tilemapTop = 9,
+    .width = 5,
+    .height = 4,
+    .paletteNum = 14,
+    .baseBlock = 0x2E9,
 };
 
 static const struct WindowTemplate sMenuWindowTemplates[] = 
@@ -189,7 +203,7 @@ static const struct OamData sOamData_Selector =
 {
     .size = SPRITE_SIZE(32x32),
     .shape = SPRITE_SHAPE(32x32),
-    .priority = 0,
+    .priority = 1,
 };
 
 static const struct CompressedSpriteSheet sSpriteSheet_Selector =
@@ -253,16 +267,6 @@ static const struct SpriteTemplate sSpriteTemplate_Selector =
     .callback = SelectorCallback
 };
 
-// Begin Generic UI Initialization Code
-// void Task_OpenStatEditorFromStartMenu(u8 taskId)
-// {
-//     if (!gPaletteFade.active)
-//     {
-//         CleanupOverworldWindowsAndTilemaps();
-//         StatEditor_Init(CB2_ReturnToFieldWithOpenMenu);
-//         DestroyTask(taskId);
-//     }
-// }
 
 void Task_OpenToEditIV(u8 taskId)
 {
@@ -540,7 +544,7 @@ static void SampleUi_DrawMonIcon(u16 dexNum)
     u16 speciesId = dexNum;
     sStatEditorDataPtr->monIconSpriteId = CreateMonPicSprite_Affine(speciesId, 0, 0x8000, TRUE, MON_ICON_X, MON_ICON_Y, 0, TAG_NONE);
 
-    gSprites[sStatEditorDataPtr->monIconSpriteId].oam.priority = 0;
+    gSprites[sStatEditorDataPtr->monIconSpriteId].oam.priority = 1;
 }
 
 static u8 CreateSelector()
@@ -967,8 +971,8 @@ static void Task_StatEditorMain(u8 taskId) // input control when first loaded in
     if (JOY_NEW(B_BUTTON))
     {
         PlaySE(SE_PC_OFF);
-        BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 16, RGB_BLACK);
-        gTasks[taskId].func = Task_StatEditorTurnOff;
+        gTasks[taskId].func = Task_CancelYesNo;
+        
     }
     // if (JOY_NEW(DPAD_LEFT) || JOY_NEW(DPAD_RIGHT))
     // {
@@ -1127,4 +1131,38 @@ static void Task_MenuEditingStat(u8 taskId) // This function should be refactore
     else if (JOY_NEW(DPAD_DOWN) || JOY_NEW(L_BUTTON))
         HandleEditingStatInput(EDIT_INPUT_MAX_DECREASE_STATE);
 
+}
+
+// static void DisplayYesNoMenu(void)
+// {
+//     CreateYesNoMenu(&sUIStatEditorYesNoWindowTemplate, 0x4F, 13, 0);
+// }
+
+
+
+
+static void Task_CancelYesNo(u8 taskId)
+{
+    if (IsPartyMenuTextPrinterActive() != TRUE)
+    {
+        CreateYesNoMenu(&sUIStatEditorYesNoWindowTemplate, 0x4F, 13, 0);
+        gTasks[taskId].func = Task_HandleCancelYesNoInput;
+    }
+}
+
+static void Task_HandleCancelYesNoInput(u8 taskId)
+{
+    switch (Menu_ProcessInputNoWrapClearOnChoose())
+    {
+    case 0:
+        BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 16, RGB_BLACK);
+        gTasks[taskId].func = Task_StatEditorTurnOff;
+        break;
+    case MENU_B_PRESSED:
+        PlaySE(SE_SELECT);
+        // fallthrough
+    case 1:
+        gTasks[taskId].func = Task_StatEditorMain;
+        break;
+    }
 }

@@ -212,9 +212,9 @@ static const struct OamData sOam_StarterCircle =
 
 static const u8 sCursorCoords[][2] =
 {
-    {60, 32},
-    {120, 56},
-    {180, 32},
+    {60, 42},
+    {120, 66},
+    {180, 42},
     {60, 22},
     {120, 46},
     {180, 22},

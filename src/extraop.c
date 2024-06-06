@@ -139,7 +139,7 @@ static void ExtraOpTask_HandleMainMenuInput(u8 taskId)
         if ((func = sExtraOpMenuActions[input]) != NULL)
             func(taskId);
     }
-    else if (JOY_NEW(B_BUTTON))
+    else if (JOY_NEW(B_BUTTON | L_BUTTON))
     {
         PlaySE(SE_SELECT);
         ExtraOp_DestroyMainMenu(taskId);
@@ -153,11 +153,6 @@ static void ExtraOpAction_Cancel(u8 taskId)
     ScriptContext_Enable();
 }
 
-// static void ExtraOp_DestroyMenu_Full_Script(u8 taskId, const u8 *script)
-// {
-//     ScriptContext_SetupScript(script);
-// }
-
 static void ExtraOpAction_ExpGain(u8 taskId)
 {
     PlaySE(SE_USE_ITEM);
@@ -165,10 +160,8 @@ static void ExtraOpAction_ExpGain(u8 taskId)
     ExtraOp_DestroyMainMenu(taskId);
 
     if(FlagGet(FLAG_XP_Gain_0x021)){
-        //ExtraOp_DestroyMenu_Full_Script(taskId,ExtraOp_EventScript_EXP_Off);
         ScriptContext_SetupScript(ExtraOp_EventScript_EXP_Off);
     }else{
-        //ExtraOp_DestroyMenu_Full_Script(taskId,ExtraOp_EventScript_EXP_On);
         ScriptContext_SetupScript(ExtraOp_EventScript_EXP_On);
     }
     ScriptContext_Enable();
@@ -188,11 +181,6 @@ static void ExtraOpAction_Healing_Stone(u8 taskId)
     ScriptContext_Enable();
 }
 
-// static void ExtraOpAction_Respec(u8 taskId)
-// {
-//     PlaySE(SE_SELECT);
-//     CreateTask(Task_OpenStatEditorFromStartMenu, 0);
-// }
 
 static void ExtraOpAction_RespecEV(u8 taskId)
 {
