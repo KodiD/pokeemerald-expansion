@@ -289,6 +289,13 @@ static const struct FormChange sSwampertFormChangeTable[] = {
 #endif
     {FORM_CHANGE_TERMINATOR},
 };
+
+static const struct FormChange sSwampertXformFormChangeTable[] = {
+#if P_MEGA_EVOLUTIONS
+    {FORM_CHANGE_BATTLE_MEGA_EVOLUTION_ITEM,    SPECIES_SWAMPERT_XFORM_MEGA, ITEM_SWAMPERTITE},
+#endif
+    {FORM_CHANGE_TERMINATOR},
+};
 #endif //P_FAMILY_MUDKIP
 
 #if P_FAMILY_RALTS

@@ -749,6 +749,15 @@ static const u16 sSwampertFormSpeciesIdTable[] = {
 #endif
     FORM_SPECIES_END,
 };
+
+static const u16 sSwampertXformFormSpeciesIdTable[] = {
+    SPECIES_SWAMPERT_XFORM,
+#if P_MEGA_EVOLUTIONS
+    SPECIES_SWAMPERT_XFORM_MEGA,
+#endif
+    FORM_SPECIES_END,
+};
+
 #endif //P_FAMILY_MUDKIP
 
 #if P_FAMILY_ZIGZAGOON

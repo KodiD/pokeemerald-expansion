@@ -515,7 +515,8 @@ const struct SpeciesInfo gSpeciesInfoGen3[] =
         FOOTPRINT(Mudkip)
         .levelUpLearnset = sMudkipLevelUpLearnset,
         .teachableLearnset = sMudkipTeachableLearnset,
-        .evolutions = EVOLUTION({EVO_LEVEL, 16, SPECIES_MARSHTOMP}),
+        .evolutions = EVOLUTION({EVO_LEVEL, 16, SPECIES_MARSHTOMP},
+                                {EVO_ITEM, ITEM_THUNDER_STONE, SPECIES_MARSHSTOMP_XFORM}),
     },
 
     [SPECIES_MARSHTOMP] =
