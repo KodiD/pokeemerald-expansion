@@ -815,6 +815,33 @@ void ZeroEnemyPartyMons(void)
         ZeroMonData(&gEnemyParty[i]);
 }
 
+void CreateMonSp(struct Pokemon *mon, u16 species, u8 level, u8 fixedIV, u8 hasFixedPersonality, u32 fixedPersonality, u8 otIdType, u32 fixedOtId, u16 fixedHp)
+{
+    
+    u32 mail;
+    ZeroMonData(mon);
+    CreateBoxMon(&mon->box, species, level, fixedIV, hasFixedPersonality, fixedPersonality, otIdType, fixedOtId);
+
+    mail = 22;
+    SetMonData(mon, MON_DATA_ABILITY_NUM, &mail);
+
+    //SetMonData(mon, MON_DATA_ABILITY_NUM,&mail2);
+    //SetMonData(mon, MON_DATA_ABILITY_NUM, &mail2);
+
+    const u8 gTexttest[] = _("the man");
+    SetMonData(mon, MON_DATA_NICKNAME, gTexttest);
+
+    SetMonData(mon, MON_DATA_LEVEL, &level);
+
+    mail = MAIL_NONE;
+    SetMonData(mon, MON_DATA_MAIL, &mail);
+    CalculateMonStats(mon);
+    
+    u32 value2 = fixedHp;
+    SetMonData(mon, MON_DATA_MAX_HP, &value2);
+    SetMonData(mon, MON_DATA_HP, &value2);
+}
+
 void CreateMon(struct Pokemon *mon, u16 species, u8 level, u8 fixedIV, u8 hasFixedPersonality, u32 fixedPersonality, u8 otIdType, u32 fixedOtId)
 {
     u32 mail;

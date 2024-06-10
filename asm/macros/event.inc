@@ -1813,6 +1813,23 @@
 	_dynmultichoice \left, \top, \ignoreBPress, \maxBeforeScroll, \shouldSort, \initialSelected, \callbacks, NULL
 	.endm
 
+	@ Prepares to start a wild battle against a 'species' at 'level' holding 'item'.
+	@ If 'species2' is something other than SPECIES_NONE, then the battle is a double battle
+	@ that is also against 'species2' at 'level2' holding 'item2'.
+	@ Running this command will not affect normal wild battles. You start the prepared battle with dowildbattle.
+	@ If the player only has one Pokemon, a scripted double battle will be buggy.
+	.macro setwildbattlesp species:req, level:req, hp:req, item=ITEM_NONE, species2=SPECIES_NONE, level2=0, hp2=0, item2=ITEM_NONE 
+	.byte 0xe5
+	.2byte \species
+	.byte \level
+	.byte \hp
+	.2byte \item
+	.2byte \species2
+	.byte \level2
+	.byte \hp2
+	.2byte \item2
+	.endm
+
 
 @ Supplementary
 

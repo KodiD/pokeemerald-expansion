@@ -106,6 +106,22 @@ bool8 DoesPartyHaveEnigmaBerry(void)
     return hasItem;
 }
 
+//CreateMon(struct Pokemon *mon, u16 species, u8 level, u8 fixedIV, u8 hasFixedPersonality, u32 fixedPersonality, u8 otIdType, u32 fixedOtId)
+// my own
+void CreateScriptedWildMonSp(u16 species, u8 level, u16 item, u16 hp)
+{
+    u8 heldItem[2];
+
+    ZeroEnemyPartyMons();
+        CreateMonSp(&gEnemyParty[0], species, level, USE_RANDOM_IVS, 0, 0, OT_ID_PRESET, 0, hp);
+    if (item)
+    {
+        heldItem[0] = item;
+        heldItem[1] = item >> 8;
+        SetMonData(&gEnemyParty[0], MON_DATA_HELD_ITEM, heldItem);
+    }
+}
+
 void CreateScriptedWildMon(u16 species, u8 level, u16 item)
 {
     u8 heldItem[2];
