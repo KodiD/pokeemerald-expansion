@@ -42,8 +42,8 @@
 #define TEMP_FLAGS_END   FLAG_TEMP_1F
 #define NUM_TEMP_FLAGS   (TEMP_FLAGS_END - TEMP_FLAGS_START + 1)
 
-#define FLAG_REPEL_0x020    0x20 
-#define FLAG_XP_Gain_0x021    0x21 // Unused Flag
+#define FLAG_REPEL_0x020     0x20 // repel charm toggle
+#define FLAG_XP_Gain_0x021   0x21 // xp gain toggle
 #define FLAG_UNUSED_0x022    0x22 // Unused Flag
 #define FLAG_UNUSED_0x023    0x23 // Unused Flag
 #define FLAG_UNUSED_0x024    0x24 // Unused Flag
@@ -1218,14 +1218,14 @@
 #define FLAG_ITEM_SAFARI_ZONE_NORTH_EAST_NUGGET                     0x491
 #define FLAG_ITEM_SAFARI_ZONE_SOUTH_EAST_BIG_PEARL                  0x492
 
-#define FLAG_UNUSED_0x493                                           0x493 // Unused Flag
-#define FLAG_UNUSED_0x494                                           0x494 // Unused Flag
-#define FLAG_UNUSED_0x495                                           0x495 // Unused Flag
-#define FLAG_UNUSED_0x496                                           0x496 // Unused Flag
-#define FLAG_UNUSED_0x497                                           0x497 // Unused Flag
-#define FLAG_UNUSED_0x498                                           0x498 // Unused Flag
-#define FLAG_UNUSED_0x499                                           0x499 // Unused Flag
-#define FLAG_UNUSED_0x49A                                           0x49A // Unused Flag
+#define FLAG_UNUSED_0x493                                           0x493 // Dynamax
+#define FLAG_NO_CATCH_0x494                                         0x494 // no catch tag
+#define FLAG_AI_CONTROL_PLAYER_0x495                                0x495 // ai control tag
+#define FLAG_NO_BAG_USE_0x496                                       0x496 // no bag use
+#define FLAG_SMART_WILD_0x497                                       0x497 // smart wild ai
+#define FLAG_FORCED_WILD_DOUBLE_0x498                               0x498 // force wild double
+#define FLAG_INVERSE_TYPE_CHART_0x499                               0x499 // inverse type battle
+#define FLAG_EXP_SHARE_0x49A                                        0x49A // EXP Share toggle
 #define FLAG_UNUSED_0x49B                                           0x49B // Unused Flag
 #define FLAG_UNUSED_0x49C                                           0x49C // Unused Flag
 #define FLAG_UNUSED_0x49D                                           0x49D // Unused Flag

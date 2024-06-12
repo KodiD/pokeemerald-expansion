@@ -842,11 +842,7 @@ static void PrintMonStats()
     StringCopy(gStringVar2, gNatureNamePointers[nature]);
     AddTextPrinterParameterized4(WINDOW_3, FONT_SMALL_NARROW, 4, 50, 0, 0, sMenuWindowFontColors[FONT_WHITE], 0xFF, gStringVar2);
 
-    //StringCopy(gStringVar2, atbol(GetMonData(ReturnPartyMon(), MON_DATA_ABILITY_NUM)));
-    //AddTextPrinterParameterized4(WINDOW_3, FONT_SMALL_NARROW, 4, 34, 0, 0, sMenuWindowFontColors[FONT_WHITE], 0xFF, gAbilitiesInfo[GetMonData(ReturnPartyMon(), MON_DATA_ABILITY_NUM)].name);
-    AddTextPrinterParameterized4(WINDOW_3, FONT_SMALL_NARROW, 4, 34, 0, 0, sMenuWindowFontColors[FONT_WHITE], 0xFF, gAbilitiesInfo[GetMonAbility(ReturnPartyMon())].name);
-    //AddTextPrinterParameterized4(WINDOW_3, FONT_SMALL_NARROW, 4, 34, 0, 0, sMenuWindowFontColors[FONT_WHITE], 0xFF, gAbilitiesInfo[GetMonData(&gPlayerParty[sStatEditorDataPtr->partyid], MON_DATA_ABILITY_NUM)].name);
-    
+    AddTextPrinterParameterized4(WINDOW_3, FONT_SMALL_NARROW, 4, 34, 0, 0, sMenuWindowFontColors[FONT_WHITE], 0xFF, gAbilitiesInfo[GetMonAbility(ReturnPartyMon())].name);    
 
 
     PutWindowTilemap(WINDOW_3);
@@ -971,7 +967,6 @@ static void Task_StatEditorMain(u8 taskId) // input control when first loaded in
     if (JOY_NEW(B_BUTTON))
     {
         PlaySE(SE_PC_OFF);
-        try_free(sBg1TilemapBuffer);
         gTasks[taskId].func = Task_CancelYesNo;
         
     }
@@ -1142,18 +1137,19 @@ static void Task_MenuEditingStat(u8 taskId) // This function should be refactore
 
 static void Task_CancelYesNo(u8 taskId)
 {
+    
     if (IsPartyMenuTextPrinterActive() != TRUE)
     {
-        FillWindowPixelBuffer(0, PIXEL_FILL(1));
-        AddTextPrinterParameterized(0, FONT_NORMAL, gText_ConfirmStarterChoice, 0, 1, 0, NULL);
-        ScheduleBgCopyTilemapToVram(0);
+        //AddTextPrinterParameterized(0, FONT_NORMAL, gText_ConfirmSave, 0, 1, 0, NULL);
         CreateYesNoMenu(&sUIStatEditorYesNoWindowTemplate, 0xF3, 2, 0);
         gTasks[taskId].func = Task_HandleCancelYesNoInput;
+        //PutWindowTilemap(&sUIStatEditorYesNoWindowTemplate);
     }
 }
 
 static void Task_HandleCancelYesNoInput(u8 taskId)
 {
+    //PutWindowTilemap(&sUIStatEditorYesNoWindowTemplate);
     switch (Menu_ProcessInputNoWrapClearOnChoose())
     {
     case 0:

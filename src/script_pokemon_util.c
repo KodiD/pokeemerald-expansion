@@ -373,13 +373,13 @@ u32 ScriptGiveMonParameterized(u16 species, u8 level, u16 item, u8 ball, u8 natu
     // ability
     if (abilityNum == NUM_ABILITY_PERSONALITY)
     {
-        abilityNum = GetMonData(&mon, MON_DATA_PERSONALITY) & 1;
+        abilityNum = gSpeciesInfo[species].abilities[GetMonData(&mon, MON_DATA_PERSONALITY) & 1];
     }
-    else if (abilityNum > NUM_NORMAL_ABILITY_SLOTS || GetAbilityBySpecies(species, abilityNum) == ABILITY_NONE)
+    else if (abilityNum<0)
     {
         do {
-            abilityNum = Random() % NUM_ABILITY_SLOTS; // includes hidden abilities
-        } while (GetAbilityBySpecies(species, abilityNum) == ABILITY_NONE);
+            abilityNum = gSpeciesInfo[species].abilities[Random() % NUM_ABILITY_SLOTS]; // includes hidden abilities
+        } while (gSpeciesInfo[species].abilities[abilityNum] == ABILITY_NONE);
     }
     SetMonData(&mon, MON_DATA_ABILITY_NUM, &abilityNum);
 
@@ -454,7 +454,7 @@ void ScrCmd_givemon(struct ScriptContext *ctx)
     u16 item          = PARSE_FLAG(0, ITEM_NONE);
     u8 ball           = PARSE_FLAG(1, ITEM_POKE_BALL);
     u8 nature         = PARSE_FLAG(2, NUM_NATURES);
-    u8 abilityNum     = PARSE_FLAG(3, NUM_ABILITY_PERSONALITY);
+    u16 abilityNum     = PARSE_FLAG(3, NUM_ABILITY_PERSONALITY);
     u8 gender         = PARSE_FLAG(4, MON_GENDERLESS); // TODO: Find a better way to assign a random gender.
     u8 hpEv           = PARSE_FLAG(5, 0);
     u8 atkEv          = PARSE_FLAG(6, 0);

@@ -40,9 +40,9 @@ enum {
 
 static const u8 gExtraOpText_ExpGain[] = _("Toggle Exp. Gain");
 static const u8 gExtraOpText_HealingStone[] = _("Use Healing Stone");
-static const u8 gExtraOpText_RespecEV[] = _("Respec Mon EV");
+static const u8 gExtraOpText_RespecEV[] = _("Toggle Dynamax");
 static const u8 gExtraOpText_RespecIV[] = _("Respec Mon IV");
-static const u8 gExtraOpText_Cancel[] = _("Cancel");
+static const u8 gExtraOpText_Cancel[] = _("Exit");
 
 static const struct ListMenuItem sExtraOpMenuItems[] =
 {
@@ -139,7 +139,13 @@ static void ExtraOpTask_HandleMainMenuInput(u8 taskId)
         if ((func = sExtraOpMenuActions[input]) != NULL)
             func(taskId);
     }
-    else if (JOY_NEW(B_BUTTON | L_BUTTON))
+    // else if (JOY_NEW(B_BUTTON | L_BUTTON))
+    // {
+    //     PlaySE(SE_SELECT);
+    //     ExtraOp_DestroyMainMenu(taskId);
+    //     ScriptContext_Enable();
+    // }
+    else if (JOY_NEW(B_BUTTON))
     {
         PlaySE(SE_SELECT);
         ExtraOp_DestroyMainMenu(taskId);
@@ -181,14 +187,21 @@ static void ExtraOpAction_Healing_Stone(u8 taskId)
     ScriptContext_Enable();
 }
 
-
+// Used for testing now
 static void ExtraOpAction_RespecEV(u8 taskId)
 {
-    PlaySE(SE_SELECT);
-    gSpecialVar_0x8004 = 0;
-    CreateTask(Task_OpenToEditEV, 0);
+    FlagToggle(FLAG_UNUSED_0x493);
+    if(FlagGet(FLAG_UNUSED_0x493)){
+        ScriptContext_SetupScript(ExtraOp_EventScript_EXP_On);
+    }else{
+        ScriptContext_SetupScript(ExtraOp_EventScript_EXP_Off);
+    }
+    ExtraOp_DestroyMainMenu(taskId);
+    ScriptContext_Enable();
 }
 
+
+//use for testing now
 static void ExtraOpAction_RespecIV(u8 taskId)
 {
     PlaySE(SE_SELECT);

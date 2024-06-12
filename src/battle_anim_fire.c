@@ -1296,20 +1296,12 @@ static void AnimWillOWispFire(struct Sprite *sprite)
 
     sprite->data[1] = (sprite->data[1] + 7) & 0xFF;
 
-    if (!IsContest())
-    {
+    
         if (sprite->data[1] < 64 || sprite->data[1] > 195)
             sprite->oam.priority = GetBattlerSpriteBGPriority(gBattleAnimTarget);
         else
             sprite->oam.priority = GetBattlerSpriteBGPriority(gBattleAnimTarget) + 1;
-    }
-    else
-    {
-        if (sprite->data[1] < 64 || sprite->data[1] > 195)
-            sprite->subpriority = 0x1D;
-        else
-            sprite->subpriority = 0x1F;
-    }
+   
 
     if (++sprite->data[2] > 0x14)
         sprite->invisible ^= 1;

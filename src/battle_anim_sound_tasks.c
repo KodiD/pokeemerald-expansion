@@ -135,19 +135,14 @@ void SoundTask_PlayCryHighPitch(u8 taskId)
 {
     u16 species = 0;
     s8 pan = BattleAnimAdjustPanning(SOUND_PAN_ATTACKER);
-    if (IsContest())
-    {
-        if (gBattleAnimArgs[0] == ANIM_ATTACKER)
-            species = gContestResources->moveAnim->species;
+            
     // Destroying the task twice (here and at end of function)
     // results in an incorrect value for gAnimVisualTaskCount
     #ifndef BUGFIX
         else
             DestroyAnimVisualTask(taskId);
     #endif
-    }
-    else
-    {
+    
         u8 battlerId;
 
         // Get wanted battler.
@@ -168,7 +163,7 @@ void SoundTask_PlayCryHighPitch(u8 taskId)
         }
 
         species = (GetIllusionMonSpecies(battlerId) != SPECIES_NONE) ? GetIllusionMonSpecies(battlerId) : gAnimBattlerSpecies[battlerId];
-    }
+    
 
     if (species != SPECIES_NONE)
         PlayCry_ByMode(species, pan, CRY_MODE_HIGH_PITCH);
@@ -180,19 +175,7 @@ void SoundTask_PlayDoubleCry(u8 taskId)
 {
     u16 species = 0;
     s8 pan = BattleAnimAdjustPanning(SOUND_PAN_ATTACKER);
-    if (IsContest())
-    {
-        if (gBattleAnimArgs[0] == ANIM_ATTACKER)
-            species = gContestResources->moveAnim->species;
-    // Destroying the task twice (here and at end of function)
-    // results in an incorrect value for gAnimVisualTaskCount
-    #ifndef BUGFIX
-        else
-            DestroyAnimVisualTask(taskId);
-    #endif
-    }
-    else
-    {
+    
         u8 battlerId;
 
         // Get wanted battler.
@@ -213,7 +196,6 @@ void SoundTask_PlayDoubleCry(u8 taskId)
         }
 
         species = (GetIllusionMonSpecies(battlerId) != SPECIES_NONE) ? GetIllusionMonSpecies(battlerId) : gAnimBattlerSpecies[battlerId];
-    }
 
     gTasks[taskId].data[0] = gBattleAnimArgs[1];
     gTasks[taskId].data[1] = species;
@@ -297,9 +279,7 @@ void SoundTask_PlayCryWithEcho(u8 taskId)
     gTasks[taskId].tLastCry = gBattleAnimArgs[0];
     pan = BattleAnimAdjustPanning(SOUND_PAN_ATTACKER);
 
-    if (IsContest())
-        species = gContestResources->moveAnim->species;
-    else
+    
         species = (GetIllusionMonSpecies(gBattleAnimAttacker) != SPECIES_NONE) ? GetIllusionMonSpecies(gBattleAnimAttacker) : gAnimBattlerSpecies[gBattleAnimAttacker];
 
     gTasks[taskId].tSpecies = species;

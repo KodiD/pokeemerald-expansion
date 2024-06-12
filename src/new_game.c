@@ -53,13 +53,7 @@ static void WarpToTruck(void);
 static void ResetMiniGamesRecords(void);
 
 EWRAM_DATA bool8 gDifferentSaveFile = FALSE;
-EWRAM_DATA bool8 gEnableContestDebugging = FALSE;
 
-static const struct ContestWinner sContestWinnerPicDummy =
-{
-    .monName = _(""),
-    .trainerName = _("")
-};
 
 void SetTrainerId(u32 trainerId, u8 *dst)
 {
@@ -105,16 +99,6 @@ static void ClearPokedexFlags(void)
     memset(&gSaveBlock1Ptr->dexSeen, 0, sizeof(gSaveBlock1Ptr->dexSeen));
 }
 
-void ClearAllContestWinnerPics(void)
-{
-    s32 i;
-
-    ClearContestWinnerPicsInContestHall();
-
-    // Clear Museum paintings
-    for (i = MUSEUM_CONTEST_WINNERS_START; i < NUM_CONTEST_WINNERS; i++)
-        gSaveBlock1Ptr->contestWinners[i] = sContestWinnerPicDummy;
-}
 
 static void ClearFrontierRecord(void)
 {
@@ -172,9 +156,8 @@ void NewGameInitData(void)
     ClearBerryTrees();
     SetMoney(&gSaveBlock1Ptr->money, 3000);
     SetCoins(0);
-    ResetLinkContestBoolean();
     ResetGameStats();
-    ClearAllContestWinnerPics();
+
     ClearPlayerLinkBattleRecords();
     InitSeedotSizeRecord();
     InitLotadSizeRecord();
@@ -204,7 +187,6 @@ void NewGameInitData(void)
     ClearMysteryGift();
     WipeTrainerNameRecords();
     ResetTrainerHillResults();
-    ResetContestLinkResults();
 }
 
 static void ResetMiniGamesRecords(void)

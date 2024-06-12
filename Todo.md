@@ -8,26 +8,31 @@
     x Leveler stone (Infinite rare candy)
     - Mark mon as ace allowed to have one level over
     - show type effectiveness in battle
-    - implement terra in battle
-    - implement mega evo
-    - set up tomem Mons as bosses
+    - implement tera in battle (not done yet in the main repo)
+    x implement mega evo (already imp)
+    x/- set up tomem Mons as bosses
     - Make hold and press register(or multi register)
     - make wait option (Change time)
     xx setup level cap
-    - auto switch to lowercase after first Letter
+    x/- auto switch to lowercase after first Letter
     - Create themed UI and Menus Graphics
     - Turbo a on THE R Button
+    x/- water electric marshstomp and swampert
 
 ## Project to Fix:
-    - Remove EV/IV Editor from extra option menu
+    x/- Remove EV/IV Editor from extra option menu
     x/- press L again to close L menu
     - make EXP. Gain a game option
     - Remove Debug MENU
-    - Remove test items from Player PC
+    x Remove test items from Player PC
     x move Sp. Atk to the right by 1-2px(+1/+2)
     x move Defense to the right by 1(+1)
     x/- fix broken starter choose 
-    x fix Level Stone
+    x/- fix Level Stone
+    - do a pass through abilityNum
+    - do a pass through GetAbilityBySpecies
+    - do a pass through MON_DATA_ABILITY_NUM
+    - battletow.c @line 3094
 
 ## Project to modifiy:
     x reflavor bottle caps and make them use able with iv ev editor
@@ -37,5 +42,4 @@
     - Change  Stat Editor text to EV Stone/ IV Stone respecfully
     x- make 6 pokeballs for starter selection
     x/- Add a Confirmation y/n to exiting the IV/EV Editor
-    - More char in Player name
     -

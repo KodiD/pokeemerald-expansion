@@ -473,3 +473,13 @@ RemainingChargesText:
 	.string "Your Party was Healed!\n" 
 	.string "You have {STR_VAR_1} charges left. $"
 
+ExtraOp_EventScript_DEBUGTEXT::
+	
+	buffernumberstring STR_VAR_1, VAR_WILD_BOSS_AB_0x40FD  
+	msgbox DebugTextTest, MSGBOX_DEFAULT
+	waitmessage
+	release
+	end
+
+DebugTextTest:
+	.string "{STR_VAR_1} $"

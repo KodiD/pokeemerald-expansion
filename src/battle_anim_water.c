@@ -908,8 +908,7 @@ static void AnimHydroCannonCharge(struct Sprite *sprite)
     sprite->y = GetBattlerSpriteCoord(gBattleAnimAttacker, BATTLER_COORD_Y);
     sprite->y2 = -10;
     priority = GetBattlerSpriteSubpriority(gBattleAnimAttacker);
-    if (!IsContest())
-    {
+   
         if (GetBattlerSide(gBattleAnimAttacker) == B_SIDE_PLAYER)
         {
             sprite->x2 = 10;
@@ -920,12 +919,6 @@ static void AnimHydroCannonCharge(struct Sprite *sprite)
             sprite->x2 = -10;
             sprite->subpriority = priority - 2;
         }
-    }
-    else
-    {
-        sprite->x2 = -10;
-        sprite->subpriority = priority + 2;
-    }
     sprite->callback = AnimHydroCannonCharge_Step;
 }
 
@@ -1010,18 +1003,13 @@ void AnimTask_CreateSurfWave(u8 taskId)
     SetAnimBgAttribute(1, BG_ANIM_PRIORITY, 1);
     SetAnimBgAttribute(1, BG_ANIM_SCREEN_SIZE, 1);
     GetBattleAnimBg1Data(&animBg);
-    if (!IsContest())
-    {
+    
         SetAnimBgAttribute(1, BG_ANIM_CHAR_BASE_BLOCK, 1);
         if (GetBattlerSide(gBattleAnimAttacker) == B_SIDE_OPPONENT)
             AnimLoadCompressedBgTilemap(animBg.bgId, gBattleAnimBgTilemap_SurfOpponent);
         else
             AnimLoadCompressedBgTilemap(animBg.bgId, gBattleAnimBgTilemap_SurfPlayer);
-    }
-    else
-    {
-        AnimLoadCompressedBgTilemapHandleContest(&animBg, gBattleAnimBgTilemap_SurfContest, TRUE);
-    }
+    
     AnimLoadCompressedBgGfx(animBg.bgId, gBattleAnimBgImage_Surf, animBg.tilesOffset);
     switch (gBattleAnimArgs[0])
     {
@@ -1045,15 +1033,7 @@ void AnimTask_CreateSurfWave(u8 taskId)
     gTasks[taskId2].data[0] = 0;
     gTasks[taskId2].data[1] = 0x1000;
     gTasks[taskId2].data[2] = 0x1000;
-    if (IsContest())
-    {
-        *x = -80;
-        *y = -48;
-        gTasks[taskId].data[0] = 2;
-        gTasks[taskId].data[1] = 1;
-        gTasks[taskId2].data[3] = 0;
-    }
-    else if (GetBattlerSide(gBattleAnimAttacker) == B_SIDE_OPPONENT)
+    if (GetBattlerSide(gBattleAnimAttacker) == B_SIDE_OPPONENT)
     {
         *x = -224;
         *y = 256;
@@ -1140,7 +1120,7 @@ static void AnimTask_CreateSurfWave_Step2(u8 taskId)
     }
     else
     {
-        if (!IsContest())
+  
             SetAnimBgAttribute(1, BG_ANIM_CHAR_BASE_BLOCK, 0);
         *BGptrX = 0;
         *BGptrY = 0;
@@ -1556,8 +1536,7 @@ void AnimTask_WaterSport(u8 taskId)
     task->data[3] = GetBattlerSpriteCoord(gBattleAnimAttacker, BATTLER_COORD_X_2);
     task->data[4] = GetBattlerSpriteCoord(gBattleAnimAttacker, BATTLER_COORD_Y_PIC_OFFSET);
     task->data[7] = (GetBattlerSide(gBattleAnimAttacker) == B_SIDE_PLAYER) ? 1 : -1;
-    if (IsContest())
-        task->data[7] *= -1;
+
     task->data[5] = task->data[3] + task->data[7] * 8;
     task->data[6] = task->data[4] - task->data[7] * 8;
     task->data[9] = -32;

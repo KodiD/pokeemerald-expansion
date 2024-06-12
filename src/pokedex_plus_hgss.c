@@ -4861,9 +4861,9 @@ static void SaveMonDataInStruct(void)
     sPokedexView->sPokemonStats.eggCycles           = gSpeciesInfo[species].eggCycles;
     sPokedexView->sPokemonStats.expYield            = gSpeciesInfo[species].expYield;
     sPokedexView->sPokemonStats.friendship          = gSpeciesInfo[species].friendship;
-    sPokedexView->sPokemonStats.ability0            = GetAbilityBySpecies(species, 0);
-    sPokedexView->sPokemonStats.ability1            = GetAbilityBySpecies(species, 1);
-    sPokedexView->sPokemonStats.abilityHidden       = GetAbilityBySpecies(species, 2);
+    sPokedexView->sPokemonStats.ability0            = gSpeciesInfo[species].abilities[0];
+    sPokedexView->sPokemonStats.ability1            = gSpeciesInfo[species].abilities[1];
+    sPokedexView->sPokemonStats.abilityHidden       = gSpeciesInfo[species].abilities[2];
 }
 
 #define tMonSpriteId data[4]
@@ -5222,16 +5222,9 @@ static void PrintStatsScreen_Moves_Top(u8 taskId)
     PrintStatsScreenTextSmall(WIN_STATS_MOVES_TOP, gStringVar3, moves_x, moves_y + 17);
 
     //Draw move type icon
-    if (gTasks[taskId].data[5] == 0)
-    {
         SetTypeIconPosAndPal(gMovesInfo[move].type, moves_x + 146, moves_y + 17, 0);
         SetSpriteInvisibility(1, TRUE);
-    }
-    else
-    {
-        SetTypeIconPosAndPal(NUMBER_OF_MON_TYPES + gMovesInfo[move].contestCategory, moves_x + 146, moves_y + 17, 1);
-        SetSpriteInvisibility(0, TRUE);
-    }
+    
 
     //Calculate and retrieve correct move from the arrays
     if (selected < numEggMoves)
@@ -5283,16 +5276,8 @@ static void PrintStatsScreen_Moves_Description(u8 taskId)
     move = sStatsMoves[selected];
 
     //Move description
-    if (gTasks[taskId].data[5] == 0)
-    {
         StringCopy(gStringVar4, gMovesInfo[move].description);
         PrintStatsScreenTextSmall(WIN_STATS_MOVES_DESCRIPTION, gStringVar4, moves_x, moves_y);
-    }
-    else
-    {
-        StringCopy(gStringVar4, gContestEffectDescriptionPointers[gMovesInfo[move].contestEffect]);
-        PrintStatsScreenTextSmall(WIN_STATS_MOVES_DESCRIPTION, gStringVar4, moves_x, moves_y);
-    }
 }
 
 static void PrintStatsScreen_Moves_BottomText(u8 taskId)
@@ -5317,10 +5302,6 @@ static void PrintStatsScreen_Moves_Bottom(u8 taskId)
     u8 moves_y = 3;
     u8 selected = sPokedexView->moveSelected;
     u16 move;
-    //Contest
-    u8 contest_effectValue;
-    u8 contest_appeal = 0;
-    u8 contest_jam = 0;
 
     //Move
     move = sStatsMoves[selected];
@@ -5347,24 +5328,7 @@ static void PrintStatsScreen_Moves_Bottom(u8 taskId)
     else //Appeal + Jam
     {
         DestroyCategoryIcon();
-        gSprites[sPokedexView->categoryIconSpriteId].invisible = TRUE;
-        //Appeal
-        contest_effectValue = gContestEffects[gMovesInfo[move].contestEffect].appeal;
-        if (contest_effectValue != 0xFF)
-            contest_appeal = contest_effectValue / 10;
-        ConvertIntToDecimalStringN(gStringVar1, contest_appeal, STR_CONV_MODE_RIGHT_ALIGN, 1);
-        StringCopy(gStringVar2, sText_PlusSymbol);
-        StringAppend(gStringVar2, gStringVar1);
-        PrintStatsScreenTextSmall(WIN_STATS_MOVES_BOTTOM, gStringVar2, moves_x + 45, moves_y);
-
-        //Jam
-        contest_effectValue = gContestEffects[gMovesInfo[move].contestEffect].jam;
-        if (contest_effectValue != 0xFF)
-            contest_jam = contest_effectValue / 10;
-        ConvertIntToDecimalStringN(gStringVar1, contest_jam, STR_CONV_MODE_RIGHT_ALIGN, 1);
-        StringCopy(gStringVar2, sText_Stats_Minus);
-        StringAppend(gStringVar2, gStringVar1);
-        PrintStatsScreenTextSmall(WIN_STATS_MOVES_BOTTOM, gStringVar2,  moves_x + 119, moves_y);
+        
     }
 }
 

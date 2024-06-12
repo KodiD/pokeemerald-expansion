@@ -1533,7 +1533,7 @@ void GetFrontierTrainerName(u8 *dst, u16 trainerId)
     {
         if (gBattleTypeFlags & BATTLE_TYPE_RECORDED)
         {
-            GetRecordedBattleRecordMixFriendName(dst);
+            //GetRecordedBattleRecordMixFriendName(dst);
             return;
         }
         else
@@ -2309,7 +2309,7 @@ static void LoadMultiPartnerCandidatesData(void)
     u32 lvlMode, battleMode;
     s32 challengeNum;
     u32 species1, species2;
-    u32 UNUSED level;
+    u8 UNUSED level;
     struct ObjectEventTemplate *objEventTemplates;
 
     objEventTemplates = gSaveBlock1Ptr->objectEventTemplates;

@@ -874,21 +874,7 @@ void HandleSpeciesGfxDataChange(u8 battlerAtk, u8 battlerDef, bool32 megaEvo, bo
     bool8 isShiny;
     const void *lzPaletteData, *src;
     void *dst;
-
-    if (IsContest())
-    {
-        position = B_POSITION_PLAYER_LEFT;
-        targetSpecies = gContestResources->moveAnim->targetSpecies;
-        personalityValue = gContestResources->moveAnim->personality;
-        isShiny = gContestResources->moveAnim->isShiny;
-
-        HandleLoadSpecialPokePic(FALSE,
-                                 gMonSpritesGfxPtr->spritesGfx[position],
-                                 targetSpecies,
-                                 gContestResources->moveAnim->targetPersonality);
-    }
-    else
-    {
+    
         position = GetBattlerPosition(battlerAtk);
 
         if (GetBattlerSide(battlerDef) == B_SIDE_OPPONENT)
@@ -932,7 +918,7 @@ void HandleSpeciesGfxDataChange(u8 battlerAtk, u8 battlerDef, bool32 megaEvo, bo
                                      targetSpecies,
                                      gTransformedPersonalities[battlerAtk]);
         }
-    }
+    
     src = gMonSpritesGfxPtr->spritesGfx[position];
     dst = (void *)(OBJ_VRAM0 + gSprites[gBattlerSpriteIds[battlerAtk]].oam.tileNum * 32);
     DmaCopy32(3, src, dst, MON_PIC_SIZE);
@@ -945,10 +931,9 @@ void HandleSpeciesGfxDataChange(u8 battlerAtk, u8 battlerDef, bool32 megaEvo, bo
     {
         BlendPalette(paletteOffset, 16, 6, RGB_WHITE);
         CpuCopy32(&gPlttBufferFaded[paletteOffset], &gPlttBufferUnfaded[paletteOffset], PLTT_SIZEOF(16));
-        if (!IsContest())
-        {
+        
             gBattleSpritesDataPtr->battlerData[battlerAtk].transformSpecies = targetSpecies;
-        }
+        
     }
 
     gSprites[gBattlerSpriteIds[battlerAtk]].y = GetBattlerSpriteDefault_Y(battlerAtk);
@@ -961,14 +946,9 @@ void BattleLoadSubstituteOrMonSpriteGfx(u8 battler, bool8 loadMonSprite)
 
     if (!loadMonSprite)
     {
-        if (IsContest())
-            position = B_POSITION_PLAYER_LEFT;
-        else
             position = GetBattlerPosition(battler);
 
-        if (IsContest())
-            LZDecompressVram(gBattleAnimSpriteGfx_SubstituteBack, gMonSpritesGfxPtr->spritesGfx[position]);
-        else if (GetBattlerSide(battler) != B_SIDE_PLAYER)
+        if (GetBattlerSide(battler) != B_SIDE_PLAYER)
             LZDecompressVram(gBattleAnimSpriteGfx_Substitute, gMonSpritesGfxPtr->spritesGfx[position]);
         else
             LZDecompressVram(gBattleAnimSpriteGfx_SubstituteBack, gMonSpritesGfxPtr->spritesGfx[position]);
@@ -983,7 +963,7 @@ void BattleLoadSubstituteOrMonSpriteGfx(u8 battler, bool8 loadMonSprite)
     }
     else
     {
-        if (!IsContest())
+       
             BattleLoadMonSpriteGfx(&GetBattlerParty(battler)[gBattlerPartyIndexes[battler]], battler);
     }
 }

@@ -272,7 +272,6 @@ static void DisplayPartyPokemonDataForMultiBattle(u8);
 static void LoadPartyBoxPalette(struct PartyMenuBox *, u8);
 static void DrawEmptySlot(u8 windowId);
 static void DisplayPartyPokemonDataForRelearner(u8);
-static void DisplayPartyPokemonDataForContest(u8);
 static void DisplayPartyPokemonDataForChooseHalf(u8);
 static void DisplayPartyPokemonDataForWirelessMinigame(u8);
 static void DisplayPartyPokemonDataForBattlePyramidHeldItem(u8);
@@ -309,6 +308,7 @@ static void DrawCancelConfirmButtons(void);
 static u8 CreatePokeballButtonSprite(u8, u8);
 static void AnimateSelectedPartyIcon(u8, u8);
 static void PartyMenuStartSpriteAnim(u8, u8);
+static void Task_ChoosePartyMon(u8);
 static u8 GetPartyBoxPaletteFlags(u8, u8);
 static bool8 PartyBoxPal_ParnterOrDisqualifiedInArena(u8);
 static u8 GetPartyIdFromBattleSlot(u8);
@@ -463,9 +463,6 @@ static void SlideMultiPartyMenuBoxSpritesOneStep(u8);
 static void Task_WaitAfterMultiPartnerPartySlideIn(u8);
 static void BufferMonSelection(void);
 static void Task_PartyMenuWaitForFade(u8 taskId);
-static void Task_ChooseContestMon(u8 taskId);
-static void CB2_ChooseContestMon(void);
-static void Task_ChoosePartyMon(u8 taskId);
 static void Task_ChooseMonForMoveRelearner(u8);
 static void CB2_ChooseMonForMoveRelearner(void);
 static void Task_BattlePyramidChooseMonHeldItems(u8);
@@ -994,8 +991,6 @@ static void RenderPartyMenuBox(u8 slot)
         {
             if (gPartyMenu.menuType == PARTY_MENU_TYPE_MOVE_RELEARNER)
                 DisplayPartyPokemonDataForRelearner(slot);
-            else if (gPartyMenu.menuType == PARTY_MENU_TYPE_CONTEST)
-                DisplayPartyPokemonDataForContest(slot);
             else if (gPartyMenu.menuType == PARTY_MENU_TYPE_CHOOSE_HALF)
                 DisplayPartyPokemonDataForChooseHalf(slot);
             else if (gPartyMenu.menuType == PARTY_MENU_TYPE_MINIGAME)
@@ -1075,21 +1070,6 @@ static void DisplayPartyPokemonDataForChooseHalf(u8 slot)
     }
 }
 
-static void DisplayPartyPokemonDataForContest(u8 slot)
-{
-    switch (GetContestEntryEligibility(&gPlayerParty[slot]))
-    {
-    case CANT_ENTER_CONTEST:
-    case CANT_ENTER_CONTEST_EGG:
-    case CANT_ENTER_CONTEST_FAINTED:
-        DisplayPartyPokemonDescriptionData(slot, PARTYBOX_DESC_NOT_ABLE);
-        break;
-    case CAN_ENTER_CONTEST_EQUAL_RANK:
-    case CAN_ENTER_CONTEST_HIGH_RANK:
-        DisplayPartyPokemonDescriptionData(slot, PARTYBOX_DESC_ABLE);
-        break;
-    }
-}
 
 static void DisplayPartyPokemonDataForRelearner(u8 slot)
 {
@@ -4706,7 +4686,7 @@ void Task_AbilityCapsule(u8 taskId)
         }
         gPartyMenuUseExitCallback = TRUE;
         GetMonNickname(&gPlayerParty[tMonId], gStringVar1);
-        StringCopy(gStringVar2, gAbilitiesInfo[GetAbilityBySpecies(tSpecies, tAbilityNum)].name);
+        StringCopy(gStringVar2, gAbilitiesInfo[tAbilityNum].name);
         StringExpandPlaceholders(gStringVar4, askText);
         PlaySE(SE_SELECT);
         DisplayPartyMenuMessage(gStringVar4, 1);
@@ -4793,7 +4773,7 @@ void Task_AbilityPatch(u8 taskId)
         }
         gPartyMenuUseExitCallback = TRUE;
         GetMonNickname(&gPlayerParty[tMonId], gStringVar1);
-        StringCopy(gStringVar2, gAbilitiesInfo[GetAbilityBySpecies(tSpecies, tAbilityNum)].name);
+        StringCopy(gStringVar2, gAbilitiesInfo[tAbilityNum].name);
         StringExpandPlaceholders(gStringVar4, askText);
         PlaySE(SE_SELECT);
         DisplayPartyMenuMessage(gStringVar4, 1);
@@ -7645,29 +7625,15 @@ static void Task_PartyMenuWaitForFade(u8 taskId)
 
 void ChooseContestMon(void)
 {
-    LockPlayerFieldControls();
-    FadeScreen(FADE_TO_BLACK, 0);
-    CreateTask(Task_ChooseContestMon, 10);
+
 }
 
 static void Task_ChooseContestMon(u8 taskId)
 {
-    if (!gPaletteFade.active)
-    {
-        CleanupOverworldWindowsAndTilemaps();
-        InitPartyMenu(PARTY_MENU_TYPE_CONTEST, PARTY_LAYOUT_SINGLE, PARTY_ACTION_CHOOSE_AND_CLOSE, FALSE, PARTY_MSG_CHOOSE_MON, Task_HandleChooseMonInput, CB2_ChooseContestMon);
-        DestroyTask(taskId);
-    }
 }
 
 static void CB2_ChooseContestMon(void)
 {
-    gContestMonPartyIndex = GetCursorSelectionMonId();
-    if (gContestMonPartyIndex >= PARTY_SIZE)
-        gContestMonPartyIndex = PARTY_NOTHING_CHOSEN;
-    gSpecialVar_0x8004 = gContestMonPartyIndex;
-    gFieldCallback2 = CB2_FadeFromPartyMenu;
-    SetMainCallback2(CB2_ReturnToField);
 }
 
 // Used as a script special for showing a party mon to various npcs (e.g. in-game trades, move deleter)

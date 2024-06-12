@@ -115,7 +115,7 @@ static void PokeblockAction_Toss(u8);
 static void PokeblockAction_Cancel(u8);
 static void PokeblockAction_UseInBattle(u8);
 static void PokeblockAction_UseOnPokeblockFeeder(u8);
-static void PokeblockAction_GiveToContestLady(u8);
+//static void PokeblockAction_GiveToContestLady(u8);
 static void TossedPokeblockMessage(u8);
 static void CloseTossPokeblockWindow(u8);
 static void Task_FreeDataAndExitPokeblockCase(u8);
@@ -220,7 +220,7 @@ static const struct MenuAction sPokeblockMenuActions[] =
     [PKBL_CANCEL]        = {gText_Cancel2, {PokeblockAction_Cancel}},
     [PKBL_USE_IN_BATTLE] = {gMenuText_Use, {PokeblockAction_UseInBattle}},
     [PKBL_USE_ON_FEEDER] = {gMenuText_Use, {PokeblockAction_UseOnPokeblockFeeder}},
-    [PKBL_GIVE_TO_LADY]  = {gMenuText_Give2, {PokeblockAction_GiveToContestLady}},
+    //[PKBL_GIVE_TO_LADY]  = {gMenuText_Give2, {PokeblockAction_GiveToContestLady}},
 };
 
 static const u8 sActionsOnField[] = {PKBL_USE_ON_FIELD, PKBL_TOSS, PKBL_CANCEL};
@@ -1281,14 +1281,6 @@ static void PokeblockAction_UseOnPokeblockFeeder(u8 taskId)
     FadePaletteAndSetTaskToClosePokeblockCase(taskId);
 }
 
-static void PokeblockAction_GiveToContestLady(u8 taskId)
-{
-    gSpecialVar_0x8004 = GivePokeblockToContestLady(&gSaveBlock1Ptr->pokeblocks[gSpecialVar_ItemId]);
-    gSpecialVar_Result = gSpecialVar_ItemId;
-    TryClearPokeblock(gSpecialVar_ItemId);
-    gSpecialVar_ItemId = 0;
-    FadePaletteAndSetTaskToClosePokeblockCase(taskId);
-}
 
 static void PokeblockAction_Cancel(u8 taskId)
 {

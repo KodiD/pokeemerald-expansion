@@ -193,20 +193,11 @@ const struct SpriteTemplate gTailGlowOrbSpriteTemplate =
 
 static void AnimMegahornHorn(struct Sprite *sprite)
 {
-    if (IsContest())
-    {
-        StartSpriteAffineAnim(sprite, 2);
-        gBattleAnimArgs[2] = -gBattleAnimArgs[2];
-        gBattleAnimArgs[0] = -gBattleAnimArgs[0];
-    }
-    else if (GetBattlerSide(gBattleAnimTarget) == B_SIDE_PLAYER)
-    {
         StartSpriteAffineAnim(sprite, 1);
         gBattleAnimArgs[1] = -gBattleAnimArgs[1];
         gBattleAnimArgs[2] = -gBattleAnimArgs[2];
         gBattleAnimArgs[3] = -gBattleAnimArgs[3];
         gBattleAnimArgs[0] = -gBattleAnimArgs[0];
-    }
 
     sprite->x = GetBattlerSpriteCoord2(gBattleAnimTarget, BATTLER_COORD_X_2) + gBattleAnimArgs[0];
     sprite->y = GetBattlerSpriteCoord2(gBattleAnimTarget, BATTLER_COORD_Y_PIC_OFFSET) + gBattleAnimArgs[1];
@@ -221,12 +212,7 @@ static void AnimMegahornHorn(struct Sprite *sprite)
 
 static void AnimLeechLifeNeedle(struct Sprite *sprite)
 {
-    if (IsContest())
-    {
-        gBattleAnimArgs[0] = -gBattleAnimArgs[0];
-        StartSpriteAffineAnim(sprite, 2);
-    }
-    else if (GetBattlerSide(gBattleAnimTarget) == B_SIDE_PLAYER)
+    if (GetBattlerSide(gBattleAnimTarget) == B_SIDE_PLAYER)
     {
         gBattleAnimArgs[1] = -gBattleAnimArgs[1];
         gBattleAnimArgs[0] = -gBattleAnimArgs[0];
@@ -252,9 +238,7 @@ static void AnimLeechLifeNeedle(struct Sprite *sprite)
 // arg 4: if targets both opponents
 static void AnimTranslateWebThread(struct Sprite *sprite)
 {
-    if (IsContest())
-        gBattleAnimArgs[2] /= 2;
-
+    
     InitSpritePosToAnimAttacker(sprite, TRUE);
     sprite->data[0] = gBattleAnimArgs[2];
     sprite->data[1] = sprite->x;
@@ -376,21 +360,16 @@ static void AnimTranslateStinger(struct Sprite *sprite)
     s16 lVarX, lVarY;
     u16 rot;
 
-    if (IsContest())
-    {
-        gBattleAnimArgs[2] = -gBattleAnimArgs[2];
-    }
-    else
-    {
+    
         if (GetBattlerSide(gBattleAnimAttacker))
         {
             gBattleAnimArgs[2] = -gBattleAnimArgs[2];
             gBattleAnimArgs[1] = -gBattleAnimArgs[1];
             gBattleAnimArgs[3] = -gBattleAnimArgs[3];
         }
-    }
+    
 
-    if (!IsContest() && GetBattlerSide(gBattleAnimAttacker) == GetBattlerSide(gBattleAnimTarget))
+    if (GetBattlerSide(gBattleAnimAttacker) == GetBattlerSide(gBattleAnimTarget))
     {
         if (GetBattlerPosition(gBattleAnimTarget) == B_POSITION_PLAYER_LEFT
          || GetBattlerPosition(gBattleAnimTarget) == B_POSITION_OPPONENT_LEFT)

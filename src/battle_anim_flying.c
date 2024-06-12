@@ -453,11 +453,6 @@ void AnimAirWaveCrescent(struct Sprite *sprite)
         gBattleAnimArgs[3] = -gBattleAnimArgs[3];
     }
 
-    if (IsContest())
-    {
-        gBattleAnimArgs[1] = -gBattleAnimArgs[1];
-        gBattleAnimArgs[3] = -gBattleAnimArgs[3];
-    }
 
     sprite->x = GetBattlerSpriteCoord(gBattleAnimAttacker, BATTLER_COORD_X_2);
     sprite->y = GetBattlerSpriteCoord(gBattleAnimAttacker, BATTLER_COORD_Y_PIC_OFFSET);
@@ -616,10 +611,8 @@ static void AnimFallingFeather(struct Sprite *sprite)
 
     if (data->unk2 >= 64 && data->unk2 <= 191)
     {
-        if (!IsContest())
-            sprite->oam.priority = GetBattlerSpriteBGPriority(battler) + 1;
-        else
-            sprite->oam.priority = GetBattlerSpriteBGPriority(battler);
+       
+        sprite->oam.priority = GetBattlerSpriteBGPriority(battler) + 1;
 
         data->unkE_0 = 0;
 
@@ -699,8 +692,7 @@ static void AnimFallingFeather_Step(struct Sprite *sprite)
                 sprite->animEnded = FALSE;
                 if (data->unk0_0c)
                 {
-                    if (!IsContest())
-                    {
+                    
                         if (!data->unkE_0)
                         {
                             sprite->oam.priority--;
@@ -711,20 +703,7 @@ static void AnimFallingFeather_Step(struct Sprite *sprite)
                             sprite->oam.priority++;
                             data->unkE_0 ^= 1;
                         }
-                    }
-                    else
-                    {
-                        if (!data->unkE_0)
-                        {
-                            sprite->subpriority -= 12;
-                            data->unkE_0 ^= 1;
-                        }
-                        else
-                        {
-                            sprite->subpriority += 12;
-                            data->unkE_0 ^= 1;
-                        }
-                    }
+                    
                 }
                 data->unk0_0d = 0;
             }
@@ -750,8 +729,7 @@ static void AnimFallingFeather_Step(struct Sprite *sprite)
                 sprite->animEnded = FALSE;
                 if (data->unk0_0c)
                 {
-                    if (!IsContest())
-                    {
+                    
                         if (!data->unkE_0)
                         {
                             sprite->oam.priority--;
@@ -762,20 +740,7 @@ static void AnimFallingFeather_Step(struct Sprite *sprite)
                             sprite->oam.priority++;
                             data->unkE_0 ^= 1;
                         }
-                    }
-                    else
-                    {
-                        if (!data->unkE_0)
-                        {
-                            sprite->subpriority -= 12;
-                            data->unkE_0 ^= 1;
-                        }
-                        else
-                        {
-                            sprite->subpriority += 12;
-                            data->unkE_0 ^= 1;
-                        }
-                    }
+                    
                 }
                 data->unk0_0d = 0;
             }
@@ -801,8 +766,7 @@ static void AnimFallingFeather_Step(struct Sprite *sprite)
                 sprite->animEnded = FALSE;
                 if (data->unk0_0c)
                 {
-                    if (!IsContest())
-                    {
+                    
                         if (!data->unkE_0)
                         {
                             sprite->oam.priority--;
@@ -813,20 +777,7 @@ static void AnimFallingFeather_Step(struct Sprite *sprite)
                             sprite->oam.priority++;
                             data->unkE_0 ^= 1;
                         }
-                    }
-                    else
-                    {
-                        if (!data->unkE_0)
-                        {
-                            sprite->subpriority -= 12;
-                            data->unkE_0 ^= 1;
-                        }
-                        else
-                        {
-                            sprite->subpriority += 12;
-                            data->unkE_0 ^= 1;
-                        }
-                    }
+                    
                 }
                 data->unk0_0d = 0;
             }
@@ -851,8 +802,7 @@ static void AnimFallingFeather_Step(struct Sprite *sprite)
                 sprite->animEnded = FALSE;
                 if (data->unk0_0c)
                 {
-                    if (!IsContest())
-                    {
+                    
                         if (!data->unkE_0)
                         {
                             sprite->oam.priority--;
@@ -863,20 +813,7 @@ static void AnimFallingFeather_Step(struct Sprite *sprite)
                             sprite->oam.priority++;
                             data->unkE_0 ^= 1;
                         }
-                    }
-                    else
-                    {
-                        if (!data->unkE_0)
-                        {
-                            sprite->subpriority -= 12;
-                            data->unkE_0 ^= 1;
-                        }
-                        else
-                        {
-                            sprite->subpriority += 12;
-                            data->unkE_0 ^= 1;
-                        }
-                    }
+                    
                 }
                 data->unk0_0d = 0;
             }
@@ -1263,7 +1200,6 @@ void AnimTask_LoadWindstormBackground(u8 taskId)
     SetAnimBgAttribute(1, BG_ANIM_PRIORITY, 1);
     SetAnimBgAttribute(1, BG_ANIM_SCREEN_SIZE, 0);
 
-    if (!IsContest())
         SetAnimBgAttribute(1, BG_ANIM_CHAR_BASE_BLOCK, 1);
 
     gBattle_BG1_X = 0;
@@ -1335,8 +1271,7 @@ static void AnimTask_LoadWindstormBackground_Step(u8 taskId)
         gTasks[taskId].data[12]++;
         break;
     case 4:
-        if (!IsContest())
-            SetAnimBgAttribute(1, BG_ANIM_CHAR_BASE_BLOCK, 0);
+        SetAnimBgAttribute(1, BG_ANIM_CHAR_BASE_BLOCK, 0);
 
         gBattle_BG1_X = 0;
         gBattle_BG1_Y = 0;

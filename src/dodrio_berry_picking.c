@@ -204,7 +204,7 @@ struct DodrioGame_Player
     bool32 receivedGameStatePacket; // Never read
     struct DodrioGame_Berries berries;
     struct DodrioGame_PlayerCommData comm;
-    u32 unused;
+    u16 unused;
 }; // size = 0x3C
 
 // Because Dodrio is required for this minigame,

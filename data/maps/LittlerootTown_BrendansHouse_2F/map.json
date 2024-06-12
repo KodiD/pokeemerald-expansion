@@ -12,7 +12,7 @@
   "allow_running": false,
   "show_map_name": false,
   "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
-  "connections": null,
+  "connections": 0,
   "object_events": [
     {
       "graphics_id": "OBJ_EVENT_GFX_RIVAL_BRENDAN_NORMAL",
@@ -234,6 +234,19 @@
       "trainer_sight_or_berry_tree_id": "0",
       "script": "PlayersHouse_2F_TeleportToStart",
       "flag": "0"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_MEW",
+      "x": 7,
+      "y": 6,
+      "elevation": 0,
+      "movement_type": "MOVEMENT_TYPE_FACE_UP",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "PlayersHouse_2F_TotemTest",
+      "flag": "0"
     }
   ],
   "warp_events": [
@@ -245,7 +258,9 @@
       "dest_warp_id": "2"
     }
   ],
-  "coord_events": [],
+  "coord_events": [
+
+  ],
   "bg_events": [
     {
       "type": "sign",

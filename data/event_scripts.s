@@ -668,9 +668,6 @@ Common_EventScript_ShowPokemonCenterSign::
 	end
 
 Common_ShowEasyChatScreen::
-	fadescreen FADE_TO_BLACK
-	special ShowEasyChatScreen
-	fadescreen FADE_FROM_BLACK
 	return
 
 Common_EventScript_ReadyPetalburgGymForBattle::

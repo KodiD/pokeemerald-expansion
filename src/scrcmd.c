@@ -1566,14 +1566,7 @@ bool8 ScrCmd_hidemonpic(struct ScriptContext *ctx)
 
 bool8 ScrCmd_showcontestpainting(struct ScriptContext *ctx)
 {
-    u8 contestWinnerId = ScriptReadByte(ctx);
 
-    // Artist's painting is temporary and already has its data loaded
-    if (contestWinnerId != CONTEST_WINNER_ARTIST)
-        SetContestWinnerForPainting(contestWinnerId);
-
-    ShowContestPainting();
-    ScriptContext_Stop();
     return TRUE;
 }
 
@@ -2047,30 +2040,22 @@ bool8 ScrCmd_getpokenewsactive(struct ScriptContext *ctx)
 
 bool8 ScrCmd_choosecontestmon(struct ScriptContext *ctx)
 {
-    ChooseContestMon();
-    ScriptContext_Stop();
     return TRUE;
 }
 
 
 bool8 ScrCmd_startcontest(struct ScriptContext *ctx)
 {
-    StartContest();
-    ScriptContext_Stop();
     return TRUE;
 }
 
 bool8 ScrCmd_showcontestresults(struct ScriptContext *ctx)
 {
-    ShowContestResults();
-    ScriptContext_Stop();
     return TRUE;
 }
 
 bool8 ScrCmd_contestlinktransfer(struct ScriptContext *ctx)
 {
-    ContestLinkTransfer(gSpecialVar_ContestCategory);
-    ScriptContext_Stop();
     return TRUE;
 }
 
@@ -2357,33 +2342,6 @@ bool8 ScrCmd_warpspinenter(struct ScriptContext *ctx)
     return TRUE;
 }
 
-bool8 ScrCmd_setwildbattlesp(struct ScriptContext *ctx)
-{
-    u16 species = ScriptReadHalfword(ctx);
-    u8 level = ScriptReadByte(ctx);
-    u16 hp = ScriptReadByte(ctx);
-    u16 item = ScriptReadHalfword(ctx);
-    u16 species2 = ScriptReadHalfword(ctx);
-    u8 level2 = ScriptReadByte(ctx);
-    u16 hp2 = ScriptReadByte(ctx);
-    u16 item2 = ScriptReadHalfword(ctx);
-
-
-    if(species2 == SPECIES_NONE)
-    {
-        CreateScriptedWildMonSp(species, level, item, hp);
-        sIsScriptedWildDouble = FALSE;
-    }
-    else
-    {
-        CreateScriptedDoubleWildMon(species, level, item, species2, level2, item2);
-        sIsScriptedWildDouble = TRUE;
-    }
-
-    return FALSE;
-}
-
-
 bool8 ScrCmd_setmonmetlocation(struct ScriptContext *ctx)
 {
     u16 partyIndex = VarGet(ScriptReadHalfword(ctx));
@@ -2436,3 +2394,30 @@ bool8 ScrCmd_warpwhitefade(struct ScriptContext *ctx)
     ResetInitialPlayerAvatarState();
     return TRUE;
 }
+
+bool8 ScrCmd_setwildbattlesp(struct ScriptContext *ctx)
+{
+    u16 species = ScriptReadHalfword(ctx);
+    u8 level = ScriptReadByte(ctx);
+    u16 hp = ScriptReadByte(ctx);
+    u16 item = ScriptReadHalfword(ctx);
+    u16 species2 = ScriptReadHalfword(ctx);
+    u8 level2 = ScriptReadByte(ctx);
+    u16 hp2 = ScriptReadByte(ctx);
+    u16 item2 = ScriptReadHalfword(ctx);
+
+
+    if(species2 == SPECIES_NONE)
+    {
+        CreateScriptedWildMonSp(species, level, item, hp);
+        sIsScriptedWildDouble = FALSE;
+    }
+    else
+    {
+        CreateScriptedDoubleWildMon(species, level, item, species2, level2, item2);
+        sIsScriptedWildDouble = TRUE;
+    }
+
+    return FALSE;
+}
+

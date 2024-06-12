@@ -2214,8 +2214,6 @@ static void HandlePlayerInput(void)
         sBerryBlender->slowdownTimer = 0;
     }
 
-    if (gEnableContestDebugging && JOY_NEW(L_BUTTON))
-        sBerryBlender->perfectOpponents ^= 1;
 }
 
 static void CB2_PlayBlender(void)

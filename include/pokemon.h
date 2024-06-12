@@ -114,6 +114,7 @@ enum {
     MON_DATA_GIGANTAMAX_FACTOR,
     MON_DATA_TERA_TYPE,
     MON_DATA_EVOLUTION_TRACKER,
+    MON_DATA_IS_BOSS,
 };
 
 struct PokemonSubstruct0
@@ -163,12 +164,6 @@ struct PokemonSubstruct2
     u8 speedEV;
     u8 spAttackEV;
     u8 spDefenseEV;
-    u8 cool;
-    u8 beauty;
-    u8 cute;
-    u8 smart;
-    u8 tough;
-    u8 sheen;
 };
 
 struct PokemonSubstruct3
@@ -179,34 +174,17 @@ struct PokemonSubstruct3
     u16 metGame:4;
     u16 dynamaxLevel:4;
     u16 otGender:1;
-    u32 hpIV:5;
-    u32 attackIV:5;
-    u32 defenseIV:5;
-    u32 speedIV:5;
-    u32 spAttackIV:5;
-    u32 spDefenseIV:5;
+    u8 hpIV:5;
+    u8 attackIV:5;
+    u8 defenseIV:5;
+    u8 speedIV:5;
+    u8 spAttackIV:5;
+    u8 spDefenseIV:5;
     u32 isEgg:1;
     u32 gigantamaxFactor:1;
-    u32 coolRibbon:3;     // Stores the highest contest rank achieved in the Cool category.
-    u32 beautyRibbon:3;   // Stores the highest contest rank achieved in the Beauty category.
-    u32 cuteRibbon:3;     // Stores the highest contest rank achieved in the Cute category.
-    u32 smartRibbon:3;    // Stores the highest contest rank achieved in the Smart category.
-    u32 toughRibbon:3;    // Stores the highest contest rank achieved in the Tough category.
-    u32 championRibbon:1; // Given when defeating the Champion. Because both RSE and FRLG use it, later generations don't specify from which region it comes from.
-    u32 winningRibbon:1;  // Given at the Battle Tower's Level 50 challenge by winning a set of seven battles that extends the current streak to 56 or more.
-    u32 victoryRibbon:1;  // Given at the Battle Tower's Level 100 challenge by winning a set of seven battles that extends the current streak to 56 or more.
-    u32 artistRibbon:1;   // Given at the Contest Hall by winning a Master Rank contest with at least 800 points, and agreeing to have the Pokémon's portrait placed in the museum after being offered.
-    u32 effortRibbon:1;   // Given at Slateport's market to Pokémon with maximum EVs.
-    u32 marineRibbon:1;   // Never distributed.
-    u32 landRibbon:1;     // Never distributed.
-    u32 skyRibbon:1;      // Never distributed.
-    u32 countryRibbon:1;  // Distributed during Pokémon Festa '04 and '05 to tournament winners.
-    u32 nationalRibbon:1; // Given to purified Shadow Pokémon in Colosseum/XD.
-    u32 earthRibbon:1;    // Given to teams that have beaten Mt. Battle's 100-battle challenge in Colosseum/XD.
-    u32 worldRibbon:1;    // Distributed during Pokémon Festa '04 and '05 to tournament winners.
     u32 isShadow:1;
     u32 unused_0B:1;
-    u32 abilityNum:2;
+    u16 abilityNum;
 
     // The functionality of this bit changed in FRLG:
     // In RS, this bit does nothing, is never set, & is accidentally unset when hatching Eggs.
@@ -253,7 +231,6 @@ struct BoxPokemon
     u16 checksum;
     u16 hpLost:14; // 16383 HP.
     u16 shinyModifier:1;
-    u16 unused_1E:1;
 
     union
     {
@@ -275,6 +252,7 @@ struct Pokemon
     u16 speed;
     u16 spAttack;
     u16 spDefense;
+    u8 isBoss;
 };
 
 struct MonSpritesGfxManager
@@ -312,13 +290,13 @@ struct BattlePokemon
     /*0x08*/ u16 spAttack;
     /*0x0A*/ u16 spDefense;
     /*0x0C*/ u16 moves[MAX_MON_MOVES];
-    /*0x14*/ u32 hpIV:5;
-    /*0x14*/ u32 attackIV:5;
-    /*0x15*/ u32 defenseIV:5;
-    /*0x15*/ u32 speedIV:5;
-    /*0x16*/ u32 spAttackIV:5;
-    /*0x17*/ u32 spDefenseIV:5;
-    /*0x17*/ u32 abilityNum:2;
+    /*0x14*/ u16 hpIV:5;
+    /*0x14*/ u8 attackIV:5;
+    /*0x15*/ u8 defenseIV:5;
+    /*0x15*/ u8 speedIV:5;
+    /*0x16*/ u8 spAttackIV:5;
+    /*0x17*/ u8 spDefenseIV:5;
+    /*0x17*/ u16 abilityNum;
     /*0x18*/ s8 statStages[NUM_BATTLE_STATS];
     /*0x20*/ u16 ability;
     /*0x22*/ u8 type1;
@@ -348,6 +326,7 @@ struct Evolution
     u16 param;
     u16 targetSpecies;
 };
+
 
 struct SpeciesInfo /*0x8C*/
 {
@@ -447,6 +426,7 @@ struct SpeciesInfo /*0x8C*/
  /* 0x84 */ const struct FormChange *formChangeTable;
 };
 
+
 struct MoveInfo
 {
     const u8 *name;
@@ -520,12 +500,6 @@ struct MoveInfo
 
     // primary/secondary effects
     const struct AdditionalEffect *additionalEffects;
-
-    // contest parameters
-    u8 contestEffect;
-    u8 contestCategory:3;
-    u8 contestComboStarterId;
-    u8 contestComboMoves[MAX_COMBO_MOVES];
 };
 
 #define EFFECTS_ARR(...) (const struct AdditionalEffect[]) {__VA_ARGS__}
@@ -546,6 +520,7 @@ struct AdditionalEffect
 struct Ability
 {
     u8 name[ABILITY_NAME_LENGTH + 1];
+    u16 ability;
     const u8 *description;
     s8 aiRating;
     u8 cantBeCopied:1; // cannot be copied by Role Play or Doodle
@@ -696,7 +671,7 @@ u8 CalculatePlayerPartyCount(void);
 u8 CalculateEnemyPartyCount(void);
 u8 GetMonsStateToDoubles(void);
 u8 GetMonsStateToDoubles_2(void);
-u16 GetAbilityBySpecies(u16 species, u8 abilityNum);
+u16 GetAbilityBySpecies(u16 species, u16 abilityNum);
 u16 GetMonAbility(struct Pokemon *mon);
 void CreateSecretBaseEnemyParty(struct SecretBase *secretBaseRecord);
 u8 GetSecretBaseTrainerPicIndex(void);

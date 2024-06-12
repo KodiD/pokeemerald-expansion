@@ -710,10 +710,10 @@ void ItemUseOutOfBattle_CoinCase(u8 taskId)
 
 void ItemUseOutOfBattle_RepelCharm(u8 taskId)
 {
-    bool8 repelCharmOn = FlagGet(OW_FLAG_NO_ENCOUNTER);
+    bool8 repelCharmOn = FlagGet(FLAG_REPEL_0x020);
     if(!repelCharmOn)
     {
-        FlagToggle(OW_FLAG_NO_ENCOUNTER);
+        FlagToggle(FLAG_REPEL_0x020);
         PlaySE(SE_REPEL);
         if(gTasks[taskId].tUsingRegisteredKeyItem){
             DisplayItemMessageOnField(taskId, gText_RepelCharmOn, Task_CloseCantUseKeyItemMessage);
@@ -724,7 +724,7 @@ void ItemUseOutOfBattle_RepelCharm(u8 taskId)
     }
     else
     {
-        FlagToggle(OW_FLAG_NO_ENCOUNTER);
+        FlagToggle(FLAG_REPEL_0x020);
         PlaySE(SE_PC_OFF);
         if (gTasks[taskId].tUsingRegisteredKeyItem){
             DisplayItemMessageOnField(taskId, gText_RepelCharmOff, Task_CloseCantUseKeyItemMessage);
@@ -1453,6 +1453,7 @@ void ItemUseOutOfBattle_IVStone(u8 taskId){
 }
 
 void ItemUseOutOfBattle_LevelStone(u8 taskId){
+    gTasks[taskId].tEnigmaBerryType = ITEM_USE_PARTY_MENU;
     gItemUseCB = ItemUseCB_LevelStone;
     SetUpItemUseCallback(taskId);
 }

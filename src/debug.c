@@ -274,7 +274,7 @@ struct DebugMonData
     u8 level;
     bool8 isShiny:1;
     u8 nature:5;
-    u8 abilityNum:2;
+    u16 abilityNum:2;
     u8  mon_iv_hp;
     u8  mon_iv_atk;
     u8  mon_iv_def;
@@ -2359,6 +2359,13 @@ void BufferExpansionVersion(struct ScriptContext *ctx)
 // Actions Scripts
 static void DebugAction_Util_Script_1(u8 taskId)
 {
+    AddBagItem(ITEM_REPEL_CHARM, 1);
+    AddBagItem(ITEM_IV_STONE, 20);
+    AddBagItem(ITEM_EV_STONE, 20);
+    AddBagItem(ITEM_LEVEL_STONE, 1);
+    AddBagItem(ITEM_MEGA_RING, 1);
+    AddBagItem(ITEM_CHARIZARDITE_X, 1);
+    AddBagItem(ITEM_RARE_CANDY, 200);
     Debug_DestroyMenu_Full_Script(taskId, Debug_EventScript_Script_1);
 }
 
@@ -3412,7 +3419,7 @@ static void DebugAction_Give_Pokemon_SelectNature(u8 taskId)
         StringCopy(gStringVar2, gText_DigitIndicator[gTasks[taskId].tDigit]);
         ConvertIntToDecimalStringN(gStringVar3, gTasks[taskId].tInput, STR_CONV_MODE_LEADING_ZEROS, 2);
         StringCopyPadded(gStringVar3, gStringVar3, CHAR_SPACE, 15);
-        abilityId = GetAbilityBySpecies(sDebugMonData->species, 0);
+        abilityId = gSpeciesInfo[sDebugMonData->species].abilities[0];
         StringCopy(gStringVar1, gAbilitiesInfo[abilityId].name);
         StringExpandPlaceholders(gStringVar4, sDebugText_PokemonAbility);
         AddTextPrinterParameterized(gTasks[taskId].tSubWindowId, DEBUG_MENU_FONT, gStringVar4, 1, 1, 0, NULL);
@@ -3932,7 +3939,7 @@ static void DebugAction_Give_Pokemon_ComplexCreateMon(u8 taskId) //https://githu
     u8 level        = sDebugMonData->level;
     bool8 isShiny   = sDebugMonData->isShiny;
     u8 nature       = sDebugMonData->nature;
-    u8 abilityNum   = sDebugMonData->abilityNum;
+    u16 abilityNum   = sDebugMonData->abilityNum;
     moves[0]        = sDebugMonData->mon_move_0;
     moves[1]        = sDebugMonData->mon_move_1;
     moves[2]        = sDebugMonData->mon_move_2;

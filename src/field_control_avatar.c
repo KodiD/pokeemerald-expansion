@@ -135,7 +135,7 @@ void FieldGetPlayerInput(struct FieldInput *input, u16 newKeys, u16 heldKeys)
     else if (heldKeys & DPAD_RIGHT)
         input->dpadDirection = DIR_EAST;
 
-    if (newKeys & L_BUTTON)
+    if (JOY_NEW(L_BUTTON))
     {
         input->input_field_1_3 = TRUE;
     }

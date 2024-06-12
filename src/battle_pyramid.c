@@ -47,7 +47,7 @@ struct PyramidWildMon
 {
     u16 species;
     u8 lvl;
-    u8 abilityNum;
+    u16 abilityNum;
     u16 moves[MAX_MON_MOVES];
 };
 
@@ -1602,12 +1602,12 @@ void GenerateBattlePyramidWildMon(void)
     default:
         if (gSpeciesInfo[wildMons[id].species].abilities[1])
         {
-            i = GetMonData(&gEnemyParty[0], MON_DATA_PERSONALITY, NULL) % 2;
+            i = gSpeciesInfo[wildMons[id].species].abilities[GetMonData(&gEnemyParty[0], MON_DATA_PERSONALITY, NULL) % 2];
             SetMonData(&gEnemyParty[0], MON_DATA_ABILITY_NUM, &i);
         }
         else
         {
-            i = 0;
+            i = gSpeciesInfo[wildMons[id].species].abilities[0];
             SetMonData(&gEnemyParty[0], MON_DATA_ABILITY_NUM, &i);
         }
         break;

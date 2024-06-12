@@ -270,7 +270,7 @@
 #define VAR_UNUSED_0x40FA                                0x40FA // faction three
 #define VAR_UNUSED_0x40FB                                0x40FB // faction four
 #define VAR_UNUSED_0x40FC                                0x40FC // faction five
-#define VAR_UNUSED_0x40FD                                0x40FD // Unused Var
+#define VAR_WILD_BOSS_AB_0x40FD                          0x40FD // wildBossAb
 #define VAR_UNUSED_0x40FE                                0x40FE // Unused Var
 #define VAR_UNUSED_0x40FF                                0x40FF // Unused Var
 

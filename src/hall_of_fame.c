@@ -35,17 +35,16 @@
 #include "confetti_util.h"
 #include "constants/rgb.h"
 
-#define HALL_OF_FAME_MAX_TEAMS 30
+#define HALL_OF_FAME_MAX_TEAMS 3
 #define TAG_CONFETTI 1001
 
 struct HallofFameMon
 {
     u32 tid;
     u32 personality;
-    u16 isShiny:1;
+    u8 isShiny:1;
     u16 species:15;
     u8 lvl;
-    u8 nickname[POKEMON_NAME_LENGTH];
 };
 
 struct HallofFameTeam
@@ -340,7 +339,6 @@ static const struct HallofFameMon sDummyFameMon =
     .isShiny = FALSE,
     .species = SPECIES_NONE,
     .lvl = 0,
-    .nickname = {0}
 };
 
 // Unused, order of party slots on Hall of Fame screen
@@ -444,7 +442,6 @@ static void Task_Hof_InitMonData(u8 taskId)
 
     for (i = 0; i < PARTY_SIZE; i++)
     {
-        u8 nickname[POKEMON_NAME_LENGTH + 1];
         if (GetMonData(&gPlayerParty[i], MON_DATA_SPECIES))
         {
             sHofMonPtr->mon[i].species = GetMonData(&gPlayerParty[i], MON_DATA_SPECIES_OR_EGG);
@@ -452,9 +449,6 @@ static void Task_Hof_InitMonData(u8 taskId)
             sHofMonPtr->mon[i].isShiny = GetMonData(&gPlayerParty[i], MON_DATA_IS_SHINY);
             sHofMonPtr->mon[i].personality = GetMonData(&gPlayerParty[i], MON_DATA_PERSONALITY);
             sHofMonPtr->mon[i].lvl = GetMonData(&gPlayerParty[i], MON_DATA_LEVEL);
-            GetMonData(&gPlayerParty[i], MON_DATA_NICKNAME, nickname);
-            for (j = 0; j < POKEMON_NAME_LENGTH; j++)
-                sHofMonPtr->mon[i].nickname[j] = nickname[j];
             gTasks[taskId].tMonNumber++;
         }
         else
@@ -464,7 +458,6 @@ static void Task_Hof_InitMonData(u8 taskId)
             sHofMonPtr->mon[i].isShiny = FALSE;
             sHofMonPtr->mon[i].personality = 0;
             sHofMonPtr->mon[i].lvl = 0;
-            sHofMonPtr->mon[i].nickname[0] = EOS;
         }
     }
 
@@ -1157,7 +1150,6 @@ static void HallOfFame_PrintMonInfo(struct HallofFameMon* currMon, u8 unused1, u
     }
 
     // nickname, species names, gender and level
-    memcpy(text, currMon->nickname, POKEMON_NAME_LENGTH);
     text[POKEMON_NAME_LENGTH] = EOS;
     if (currMon->species == SPECIES_EGG)
     {

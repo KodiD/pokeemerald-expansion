@@ -1110,7 +1110,7 @@ bool32 TryGenerateBattlePikeWildMon(bool8 checkKeenEyeIntimidate)
     u8 headerId = GetBattlePikeWildMonHeaderId();
     u32 lvlMode = gSaveBlock2Ptr->frontier.lvlMode;
     const struct PikeWildMon *const *const wildMons = sWildMons[lvlMode];
-    u32 abilityNum;
+    u16 abilityNum;
     s32 pikeMonId = GetMonData(&gEnemyParty[0], MON_DATA_SPECIES, NULL);
     pikeMonId = SpeciesToPikeMonId(pikeMonId);
 

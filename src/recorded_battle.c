@@ -24,7 +24,6 @@
 struct PlayerInfo
 {
     u32 trainerId;
-    u8 name[PLAYER_NAME_LENGTH + 1];
     u8 gender;
     u16 battlerId;
     u16 language;
@@ -55,7 +54,6 @@ EWRAM_DATA static struct Pokemon sSavedOpponentParty[PARTY_SIZE] = {0};
 EWRAM_DATA static u16 sPlayerMonMoves[MAX_BATTLERS_COUNT / 2][MAX_MON_MOVES] = {0};
 EWRAM_DATA static struct PlayerInfo sPlayers[MAX_BATTLERS_COUNT] = {0};
 EWRAM_DATA static bool8 sIsPlaybackFinished = 0;
-EWRAM_DATA static u8 sRecordMixFriendName[PLAYER_NAME_LENGTH + 1] = {0};
 EWRAM_DATA static u8 sRecordMixFriendClass = 0;
 EWRAM_DATA static u8 sApprenticeId = 0;
 EWRAM_DATA static u16 sEasyChatSpeech[EASY_CHAT_BATTLE_WORDS_COUNT] = {0};
@@ -123,18 +121,6 @@ void RecordedBattle_SetTrainerInfo(void)
             sPlayers[i].battlerId = gLinkPlayers[i].id;
             sPlayers[i].language = gLinkPlayers[i].language;
 
-            // Record names
-            if (i < linkPlayersCount)
-            {
-                StringCopy(text, gLinkPlayers[i].name);
-                StripExtCtrlCodes(text);
-                StringCopy(sPlayers[i].name, text);
-            }
-            else
-            {
-                for (j = 0; j < PLAYER_NAME_LENGTH + 1; j++)
-                    sPlayers[i].name[j] = gLinkPlayers[i].name[j];
-            }
         }
     }
     else
@@ -149,8 +135,7 @@ void RecordedBattle_SetTrainerInfo(void)
         sPlayers[0].battlerId = 0;
         sPlayers[0].language = gGameLanguage;
 
-        for (i = 0; i < PLAYER_NAME_LENGTH + 1; i++)
-            sPlayers[0].name[i] = gSaveBlock2Ptr->playerName[i];
+    
     }
 }
 
@@ -306,8 +291,7 @@ bool32 MoveRecordedBattleToSaveData(void)
 
     for (i = 0; i < MAX_BATTLERS_COUNT; i++)
     {
-        for (j = 0; j < PLAYER_NAME_LENGTH + 1; j++)
-            battleSave->playersName[i][j] = sPlayers[i].name[j];
+        
         battleSave->playersGender[i] = sPlayers[i].gender;
         battleSave->playersLanguage[i] = sPlayers[i].language;
         battleSave->playersBattlers[i] = sPlayers[i].battlerId;
@@ -362,8 +346,6 @@ bool32 MoveRecordedBattleToSaveData(void)
 
     if (gTrainerBattleOpponent_A >= TRAINER_RECORD_MIXING_FRIEND && gTrainerBattleOpponent_A < TRAINER_RECORD_MIXING_APPRENTICE)
     {
-        for (i = 0; i < PLAYER_NAME_LENGTH + 1; i++)
-            battleSave->recordMixFriendName[i] = gSaveBlock2Ptr->frontier.towerRecords[gTrainerBattleOpponent_A - TRAINER_RECORD_MIXING_FRIEND].name[i];
         battleSave->recordMixFriendClass = gSaveBlock2Ptr->frontier.towerRecords[gTrainerBattleOpponent_A - TRAINER_RECORD_MIXING_FRIEND].facilityClass;
 
         if (sBattleOutcome == B_OUTCOME_WON)
@@ -380,8 +362,6 @@ bool32 MoveRecordedBattleToSaveData(void)
     }
     else if (gTrainerBattleOpponent_B >= TRAINER_RECORD_MIXING_FRIEND && gTrainerBattleOpponent_B < TRAINER_RECORD_MIXING_APPRENTICE)
     {
-        for (i = 0; i < PLAYER_NAME_LENGTH + 1; i++)
-            battleSave->recordMixFriendName[i] = gSaveBlock2Ptr->frontier.towerRecords[gTrainerBattleOpponent_B - TRAINER_RECORD_MIXING_FRIEND].name[i];
         battleSave->recordMixFriendClass = gSaveBlock2Ptr->frontier.towerRecords[gTrainerBattleOpponent_B - TRAINER_RECORD_MIXING_FRIEND].facilityClass;
 
         if (sBattleOutcome == B_OUTCOME_WON)
@@ -398,8 +378,6 @@ bool32 MoveRecordedBattleToSaveData(void)
     }
     else if (gPartnerTrainerId >= TRAINER_RECORD_MIXING_FRIEND && gPartnerTrainerId < TRAINER_RECORD_MIXING_APPRENTICE)
     {
-        for (i = 0; i < PLAYER_NAME_LENGTH + 1; i++)
-            battleSave->recordMixFriendName[i] = gSaveBlock2Ptr->frontier.towerRecords[gPartnerTrainerId - TRAINER_RECORD_MIXING_FRIEND].name[i];
         battleSave->recordMixFriendClass = gSaveBlock2Ptr->frontier.towerRecords[gPartnerTrainerId - TRAINER_RECORD_MIXING_FRIEND].facilityClass;
 
         battleSave->recordMixFriendLanguage = gSaveBlock2Ptr->frontier.towerRecords[gPartnerTrainerId - TRAINER_RECORD_MIXING_FRIEND].language;
@@ -513,19 +491,11 @@ void SetVariablesForRecordedBattle(struct RecordedBattleSave *src)
     SetPartiesFromRecordedSave(src);
     for (i = 0; i < MAX_BATTLERS_COUNT; i++)
     {
-        for (var = FALSE, j = 0; j < PLAYER_NAME_LENGTH + 1; j++)
-        {
-            gLinkPlayers[i].name[j] = src->playersName[i][j];
-            if (src->playersName[i][j] == EOS)
-                var = TRUE;
-        }
         gLinkPlayers[i].gender = src->playersGender[i];
         gLinkPlayers[i].language = src->playersLanguage[i];
         gLinkPlayers[i].id = src->playersBattlers[i];
         gLinkPlayers[i].trainerId = src->playersTrainerId[i];
 
-        if (var)
-            ConvertInternationalString(gLinkPlayers[i].name, gLinkPlayers[i].language);
     }
 
     gRecordedBattleRngSeed = src->rngSeed;
@@ -541,8 +511,6 @@ void SetVariablesForRecordedBattle(struct RecordedBattleSave *src)
     sTextSpeed = src->textSpeed;
     sAI_Scripts = src->AI_scripts;
 
-    for (i = 0; i < PLAYER_NAME_LENGTH + 1; i++)
-        sRecordMixFriendName[i] = src->recordMixFriendName[i];
 
     sRecordMixFriendClass = src->recordMixFriendClass;
     sApprenticeId = src->apprenticeId;
@@ -799,16 +767,6 @@ void RecordedBattle_SetPlaybackFinished(void)
 bool8 RecordedBattle_CanStopPlayback(void)
 {
     return (sIsPlaybackFinished == FALSE);
-}
-
-void GetRecordedBattleRecordMixFriendName(u8 *dst)
-{
-    s32 i;
-
-    for (i = 0; i < PLAYER_NAME_LENGTH + 1; i++)
-        dst[i] = sRecordMixFriendName[i];
-    dst[PLAYER_NAME_LENGTH] = EOS;
-    ConvertInternationalString(dst, sRecordMixFriendLanguage);
 }
 
 u8 GetRecordedBattleRecordMixFriendClass(void)

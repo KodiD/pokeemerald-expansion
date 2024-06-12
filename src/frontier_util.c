@@ -1473,7 +1473,7 @@ static void ShowLinkContestResultsWindow(void)
     {
         for (j = 0; j < CONTESTANT_COUNT; j++)
         {
-            ConvertIntToDecimalStringN(gStringVar4, gSaveBlock2Ptr->contestLinkResults[i][j], STR_CONV_MODE_RIGHT_ALIGN, 4);
+            
             AddTextPrinterParameterized(gRecordsWindowId, FONT_NORMAL, gStringVar4, (j * 38) + 64, (i * 16) + 41, TEXT_SKIP_DRAW, NULL);
         }
     }

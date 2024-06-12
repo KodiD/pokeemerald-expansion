@@ -84,7 +84,7 @@
       "y": 10,
       "elevation": 0,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
-      "script": "LilycoveCity_LilycoveMuseum_2F_EventScript_CutePainting"
+      "script": "LilycoveCity_LilycoveMuseum_EventScript_BirdSculpture"
     },
     {
       "type": "sign",
@@ -92,7 +92,7 @@
       "y": 10,
       "elevation": 0,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
-      "script": "LilycoveCity_LilycoveMuseum_2F_EventScript_CutePainting"
+      "script": "LilycoveCity_LilycoveMuseum_EventScript_BirdSculpture"
     },
     {
       "type": "sign",
@@ -100,7 +100,7 @@
       "y": 6,
       "elevation": 0,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
-      "script": "LilycoveCity_LilycoveMuseum_2F_EventScript_ToughPainting"
+      "script": "LilycoveCity_LilycoveMuseum_EventScript_BirdSculpture"
     },
     {
       "type": "sign",
@@ -108,7 +108,7 @@
       "y": 6,
       "elevation": 0,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
-      "script": "LilycoveCity_LilycoveMuseum_2F_EventScript_ToughPainting"
+      "script": "LilycoveCity_LilycoveMuseum_EventScript_BirdSculpture"
     },
     {
       "type": "sign",
@@ -116,7 +116,7 @@
       "y": 6,
       "elevation": 0,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
-      "script": "LilycoveCity_LilycoveMuseum_2F_EventScript_CoolPainting"
+      "script": "LilycoveCity_LilycoveMuseum_EventScript_BirdSculpture"
     },
     {
       "type": "sign",
@@ -124,7 +124,7 @@
       "y": 6,
       "elevation": 0,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
-      "script": "LilycoveCity_LilycoveMuseum_2F_EventScript_CoolPainting"
+      "script": "LilycoveCity_LilycoveMuseum_EventScript_BirdSculpture"
     },
     {
       "type": "sign",
@@ -132,7 +132,7 @@
       "y": 6,
       "elevation": 0,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
-      "script": "LilycoveCity_LilycoveMuseum_2F_EventScript_BeautyPainting"
+      "script": "LilycoveCity_LilycoveMuseum_EventScript_BirdSculpture"
     },
     {
       "type": "sign",
@@ -140,7 +140,7 @@
       "y": 6,
       "elevation": 0,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
-      "script": "LilycoveCity_LilycoveMuseum_2F_EventScript_BeautyPainting"
+      "script": "LilycoveCity_LilycoveMuseum_EventScript_BirdSculpture"
     },
     {
       "type": "sign",
@@ -148,7 +148,7 @@
       "y": 10,
       "elevation": 0,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
-      "script": "LilycoveCity_LilycoveMuseum_2F_EventScript_SmartPainting"
+      "script": "LilycoveCity_LilycoveMuseum_EventScript_BirdSculpture"
     },
     {
       "type": "sign",
@@ -156,7 +156,7 @@
       "y": 10,
       "elevation": 0,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
-      "script": "LilycoveCity_LilycoveMuseum_2F_EventScript_SmartPainting"
+      "script": "LilycoveCity_LilycoveMuseum_EventScript_BirdSculpture"
     },
     {
       "type": "sign",

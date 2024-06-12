@@ -569,7 +569,6 @@ BerryBlender_EventScript_TryDoLinkBlender:
 	call Common_EventScript_SaveGame
 	goto_if_eq VAR_RESULT, FALSE, BerryBlender_EventScript_CancelLinkBlender
 	specialvar VAR_RESULT, IsWirelessAdapterConnected
-	goto_if_eq VAR_RESULT, TRUE, BerryBlender_EventScript_StartDecideLinkLeader
 	message BerryBlender_Text_SearchingForFriends
 	waitmessage
 	special TryBerryBlenderLinkup
@@ -663,26 +662,10 @@ BerryBlender_EventScript_LinkPlayersArrived:
 	case 4, BerryBlender_EventScript_FourPlayerLink
 	end
 
-BerryBlender_EventScript_StartDecideLinkLeader:
-	setvar VAR_0x8004, LINK_GROUP_BERRY_BLENDER
-	goto BerryBlender_EventScript_DecideLinkLeader
-	end
-
-BerryBlender_EventScript_DecideLinkLeader:
-	message LilycoveCity_ContestLobby_Text_PleaseDecideLinkLeader
-	waitmessage
-	multichoice 16, 6, MULTI_LINK_LEADER, FALSE
-	switch VAR_RESULT
-	case 0, BerryBlender_EventScript_TryJoinGroup
-	case 1, BerryBlender_EventScript_TryLeadGroup
-	case 2, BerryBlender_EventScript_CloseLink
-	case MULTI_B_PRESSED, BerryBlender_EventScript_CloseLink
-	end
 
 BerryBlender_EventScript_TryLeadGroup:
 	call BerryBlender_EventScript_TryBecomeLinkLeader
 	goto_if_eq VAR_RESULT, LINKUP_SUCCESS, BerryBlender_EventScript_LinkLeaderDecided
-	goto_if_eq VAR_RESULT, LINKUP_FAILED, BerryBlender_EventScript_DecideLinkLeader
 	goto_if_eq VAR_RESULT, LINKUP_RETRY_ROLE_ASSIGN, BerryBlender_EventScript_TryLeadGroup
 	release
 	end
@@ -690,7 +673,6 @@ BerryBlender_EventScript_TryLeadGroup:
 BerryBlender_EventScript_TryJoinGroup:
 	call BerryBlender_EventScript_TryJoinLinkGroup
 	goto_if_eq VAR_RESULT, LINKUP_SUCCESS, BerryBlender_EventScript_LinkLeaderDecided
-	goto_if_eq VAR_RESULT, LINKUP_FAILED, BerryBlender_EventScript_DecideLinkLeader
 	goto_if_eq VAR_RESULT, LINKUP_RETRY_ROLE_ASSIGN, BerryBlender_EventScript_TryJoinGroup
 	release
 	end

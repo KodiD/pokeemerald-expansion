@@ -1541,11 +1541,7 @@ void AnimSonicBoomProjectile(struct Sprite *sprite)
     s16 targetYPos;
     u16 rotation;
 
-    if (IsContest())
-    {
-        gBattleAnimArgs[2] = -gBattleAnimArgs[2];
-    }
-    else if (GetBattlerSide(gBattleAnimAttacker) != B_SIDE_PLAYER)
+    if (GetBattlerSide(gBattleAnimAttacker) != B_SIDE_PLAYER)
     {
         gBattleAnimArgs[2] = -gBattleAnimArgs[2];
         gBattleAnimArgs[1] = -gBattleAnimArgs[1];
@@ -1557,8 +1553,7 @@ void AnimSonicBoomProjectile(struct Sprite *sprite)
     targetYPos = GetBattlerSpriteCoord(gBattleAnimTarget, BATTLER_COORD_Y_PIC_OFFSET) + gBattleAnimArgs[3];
     rotation = ArcTan2Neg(targetXPos - sprite->x, targetYPos - sprite->y);
     rotation += 0xF000;
-    if (IsContest())
-        rotation -= 0x6000;
+   
 
     TrySetSpriteRotScale(sprite, FALSE, 0x100, 0x100, rotation);
     sprite->data[0] = gBattleAnimArgs[4];
@@ -1701,17 +1696,7 @@ void AnimTask_AirCutterProjectile(u8 taskId)
     s16 targetY = 0;
     s16 xDiff, yDiff;
 
-    if (IsContest())
-    {
-        gTasks[taskId].data[4] = 2;
-        gBattleAnimArgs[0] = -gBattleAnimArgs[0];
-        if (gBattleAnimArgs[2] & 1)
-            gBattleAnimArgs[2] &= ~1;
-        else
-            gBattleAnimArgs[2] |= 1;
-    }
-    else
-    {
+    
         if (GetBattlerSide(gBattleAnimTarget) == B_SIDE_PLAYER)
         {
             gTasks[taskId].data[4] = 1;
@@ -1722,7 +1707,7 @@ void AnimTask_AirCutterProjectile(u8 taskId)
             else
                 gBattleAnimArgs[2] |= 1;
         }
-    }
+    
 
     attackerX = gTasks[taskId].data[9] = GetBattlerSpriteCoord(gBattleAnimAttacker, BATTLER_COORD_X);
     attackerY = gTasks[taskId].data[10] = GetBattlerSpriteCoord(gBattleAnimAttacker, BATTLER_COORD_Y);
@@ -2687,7 +2672,7 @@ void AnimHyperVoiceRing(struct Sprite *sprite)
     else
     {
         startX = GetBattlerSpriteCoord(battler1, xCoordType) - gBattleAnimArgs[0];
-        if (!IsContest() && IsBattlerSpriteVisible(BATTLE_PARTNER(battler1)))
+        if (IsBattlerSpriteVisible(BATTLE_PARTNER(battler1)))
         {
             if (gSprites[gBattlerSpriteIds[battler1]].x < gSprites[gBattlerSpriteIds[BATTLE_PARTNER(battler1)]].x)
                 sprite->subpriority = gSprites[gBattlerSpriteIds[BATTLE_PARTNER(battler1)]].subpriority + 1;
@@ -2702,7 +2687,7 @@ void AnimHyperVoiceRing(struct Sprite *sprite)
     }
 
     startY = GetBattlerSpriteCoord(battler1, yCoordType) + gBattleAnimArgs[1];
-    if (!IsContest() && IsBattlerSpriteVisible(BATTLE_PARTNER(battler2)))
+    if (IsBattlerSpriteVisible(BATTLE_PARTNER(battler2)))
     {
         SetAverageBattlerPositions(battler2, gBattleAnimArgs[6], &x, &y);
     }
@@ -3132,10 +3117,8 @@ void AnimMagentaHeart(struct Sprite *sprite)
 
 void AnimTask_FakeOut(u8 taskId)
 {
-    u16 win0h = IsContest() ? 152 : DISPLAY_WIDTH;
     u16 win0v = 0;
 
-    gBattle_WIN0H = win0h;
     gBattle_WIN0V = DISPLAY_HEIGHT;
     SetGpuReg(REG_OFFSET_WIN0H, gBattle_WIN0H);
     SetGpuReg(REG_OFFSET_WIN0V, gBattle_WIN0V);
@@ -3144,7 +3127,6 @@ void AnimTask_FakeOut(u8 taskId)
     SetGpuReg(REG_OFFSET_BLDCNT, BLDCNT_TGT1_BG3 | BLDCNT_EFFECT_DARKEN);
     SetGpuReg(REG_OFFSET_BLDY, 16);
     gTasks[taskId].data[0] = win0v;
-    gTasks[taskId].data[1] = win0h;
     gTasks[taskId].func = AnimTask_FakeOut_Step1;
 }
 
@@ -3304,9 +3286,8 @@ void AnimTask_HeartsBackground(u8 taskId)
     SetGpuReg(REG_OFFSET_BLDALPHA, BLDALPHA_BLEND(0, 16));
     SetAnimBgAttribute(1, BG_ANIM_PRIORITY, 3);
     SetAnimBgAttribute(1, BG_ANIM_SCREEN_SIZE, 0);
-    if (!IsContest())
+  
         SetAnimBgAttribute(1, BG_ANIM_CHAR_BASE_BLOCK, 1);
-
     gBattle_BG1_X = 0;
     gBattle_BG1_Y = 0;
     SetGpuReg(REG_OFFSET_BG1HOFS, gBattle_BG1_X);
@@ -3363,7 +3344,6 @@ static void AnimTask_HeartsBackground_Step(u8 taskId)
         gTasks[taskId].data[12]++;
         break;
     case 4:
-        if (!IsContest())
             SetAnimBgAttribute(1, BG_ANIM_CHAR_BASE_BLOCK, 0);
 
         SetGpuReg(REG_OFFSET_BLDCNT, 0);
@@ -3388,7 +3368,7 @@ void AnimTask_ScaryFace(u8 taskId)
     SetGpuReg(REG_OFFSET_BLDALPHA, BLDALPHA_BLEND(0, 16));
     SetAnimBgAttribute(1, BG_ANIM_PRIORITY, 1);
     SetAnimBgAttribute(1, BG_ANIM_SCREEN_SIZE, 0);
-    if (!IsContest())
+
         SetAnimBgAttribute(1, BG_ANIM_CHAR_BASE_BLOCK, 1);
 
     gBattle_BG1_X = 0;
@@ -3396,9 +3376,7 @@ void AnimTask_ScaryFace(u8 taskId)
     SetGpuReg(REG_OFFSET_BG1HOFS, gBattle_BG1_X);
     SetGpuReg(REG_OFFSET_BG1VOFS, gBattle_BG1_Y);
     GetBattleAnimBg1Data(&animBg);
-    if (IsContest())
-        AnimLoadCompressedBgTilemapHandleContest(&animBg, &gBattleAnimBgTilemap_ScaryFaceContest, FALSE);
-    else if (onPlayer)
+    if (onPlayer)
         AnimLoadCompressedBgTilemapHandleContest(&animBg, &gBattleAnimBgTilemap_ScaryFacePlayer, FALSE);
     else
         AnimLoadCompressedBgTilemapHandleContest(&animBg, &gBattleAnimBgTilemap_ScaryFaceOpponent, FALSE);
@@ -3454,7 +3432,6 @@ static void AnimTask_ScaryFace_Step(u8 taskId)
         gTasks[taskId].data[12]++;
         // fall through
     case 4:
-        if (!IsContest())
             SetAnimBgAttribute(1, BG_ANIM_CHAR_BASE_BLOCK, 0);
 
         SetGpuReg(REG_OFFSET_BLDCNT, 0);
