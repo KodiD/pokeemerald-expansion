@@ -22,7 +22,8 @@
 ## Project to Fix:
     x/- Remove EV/IV Editor from extra option menu
     x/- press L again to close L menu
-    - make EXP. Gain a game option
+    x make clock color a game option
+    x make EXP. Gain a game option
     - Remove Debug MENU
     x Remove test items from Player PC
     x move Sp. Atk to the right by 1-2px(+1/+2)
@@ -42,4 +43,4 @@
     - Change  Stat Editor text to EV Stone/ IV Stone respecfully
     x- make 6 pokeballs for starter selection
     x/- Add a Confirmation y/n to exiting the IV/EV Editor
-    -
+    - add option menu scroll

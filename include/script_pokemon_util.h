@@ -5,7 +5,7 @@ u32 ScriptGiveMon(u16, u8, u16);
 u32 ScriptGiveMonParameterized(u16, u8, u16, u8, u8, u8, u8, u8 *, u8 *, u16 *, bool8, bool8, u8);
 u8 ScriptGiveEgg(u16);
 void CreateScriptedWildMon(u16, u8, u16);
-void CreateScriptedWildMonSp(u16, u8, u16, u16);
+void CreateScriptedWildMonSp(u16, u8, u16, u16, u16);
 void CreateScriptedDoubleWildMon(u16, u8, u16, u16, u8, u16);
 void ScriptSetMonMoveSlot(u8, u16, u8);
 void ReducePlayerPartyToSelectedMons(void);

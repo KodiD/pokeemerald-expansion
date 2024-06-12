@@ -15,20 +15,24 @@
 #include "window.h"
 #include "gba/m4a_internal.h"
 #include "constants/rgb.h"
+#include "event_data.h"
 
 #define tMenuSelection data[0]
 #define tTextSpeed data[1]
 #define tBattleSceneOff data[2]
-#define tBattleStyle data[3]
-#define tSound data[4]
-#define tButtonMode data[5]
-#define tWindowFrameType data[6]
+#define tExpGain data[3]
+#define tClockColor data[4]
+#define tBattleStyle data[5]
+#define tSound data[6]
+#define tButtonMode data[7]
+#define tWindowFrameType data[8]
 
 enum
 {
     MENUITEM_TEXTSPEED,
     MENUITEM_BATTLESCENE,
-    //MENUITEM_GAINEXP,
+    MENUITEM_GAINEXP,
+    MENUITEM_CLOCKCOLOR,
     MENUITEM_BATTLESTYLE,
     MENUITEM_SOUND,
     MENUITEM_BUTTONMODE,
@@ -46,7 +50,8 @@ enum
 
 #define YPOS_TEXTSPEED    (MENUITEM_TEXTSPEED * 16)
 #define YPOS_BATTLESCENE  (MENUITEM_BATTLESCENE * 16)
-//#define YPOS_GAINEXP      (MENUITEM_GAINEXP * 16)
+#define YPOS_GAINEXP      (MENUITEM_GAINEXP * 16)
+#define YPOS_CLOCKCOLOR   (MENUITEM_CLOCKCOLOR * 16)
 #define YPOS_BATTLESTYLE  (MENUITEM_BATTLESTYLE * 16)
 #define YPOS_SOUND        (MENUITEM_SOUND * 16)
 #define YPOS_BUTTONMODE   (MENUITEM_BUTTONMODE * 16)
@@ -61,6 +66,10 @@ static u8 TextSpeed_ProcessInput(u8 selection);
 static void TextSpeed_DrawChoices(u8 selection);
 static u8 BattleScene_ProcessInput(u8 selection);
 static void BattleScene_DrawChoices(u8 selection);
+static u8 ExpGain_ProcessInput(u8 selection);
+static void ExpGain_DrawChoices(u8 selection);
+static u8 ClockColor_ProcessInput(u8 selection);
+static void ClockColor_DrawChoices(u8 selection);
 static u8 BattleStyle_ProcessInput(u8 selection);
 static void BattleStyle_DrawChoices(u8 selection);
 static u8 Sound_ProcessInput(u8 selection);
@@ -83,6 +92,8 @@ static const u8 *const sOptionMenuItemsNames[MENUITEM_COUNT] =
 {
     [MENUITEM_TEXTSPEED]   = gText_TextSpeed,
     [MENUITEM_BATTLESCENE] = gText_BattleScene,
+    [MENUITEM_GAINEXP] = gText_ExpGain,
+    [MENUITEM_CLOCKCOLOR] = gText_ClockColor,
     [MENUITEM_BATTLESTYLE] = gText_BattleStyle,
     [MENUITEM_SOUND]       = gText_Sound,
     [MENUITEM_BUTTONMODE]  = gText_ButtonMode,
@@ -233,6 +244,8 @@ void CB2_InitOptionMenu(void)
         gTasks[taskId].tMenuSelection = 0;
         gTasks[taskId].tTextSpeed = gSaveBlock2Ptr->optionsTextSpeed;
         gTasks[taskId].tBattleSceneOff = gSaveBlock2Ptr->optionsBattleSceneOff;
+        gTasks[taskId].tExpGain = gSaveBlock2Ptr->optionsExpGain;
+        gTasks[taskId].tClockColor = gSaveBlock2Ptr->optionsClockColor;
         gTasks[taskId].tBattleStyle = gSaveBlock2Ptr->optionsBattleStyle;
         gTasks[taskId].tSound = gSaveBlock2Ptr->optionsSound;
         gTasks[taskId].tButtonMode = gSaveBlock2Ptr->optionsButtonMode;
@@ -240,6 +253,8 @@ void CB2_InitOptionMenu(void)
 
         TextSpeed_DrawChoices(gTasks[taskId].tTextSpeed);
         BattleScene_DrawChoices(gTasks[taskId].tBattleSceneOff);
+        ExpGain_DrawChoices(gTasks[taskId].tExpGain);
+        ClockColor_DrawChoices(gTasks[taskId].tClockColor);
         BattleStyle_DrawChoices(gTasks[taskId].tBattleStyle);
         Sound_DrawChoices(gTasks[taskId].tSound);
         ButtonMode_DrawChoices(gTasks[taskId].tButtonMode);
@@ -311,6 +326,20 @@ static void Task_OptionMenuProcessInput(u8 taskId)
             if (previousOption != gTasks[taskId].tBattleSceneOff)
                 BattleScene_DrawChoices(gTasks[taskId].tBattleSceneOff);
             break;
+        case MENUITEM_GAINEXP:
+            previousOption = gTasks[taskId].tExpGain;
+            gTasks[taskId].tExpGain = ExpGain_ProcessInput(gTasks[taskId].tExpGain);
+
+            if (previousOption != gTasks[taskId].tExpGain)
+                ExpGain_DrawChoices(gTasks[taskId].tExpGain);
+            break;
+        case MENUITEM_CLOCKCOLOR:
+            previousOption = gTasks[taskId].tClockColor;
+            gTasks[taskId].tClockColor = ClockColor_ProcessInput(gTasks[taskId].tClockColor);
+
+            if (previousOption != gTasks[taskId].tClockColor)
+                ClockColor_DrawChoices(gTasks[taskId].tClockColor);
+            break;
         case MENUITEM_BATTLESTYLE:
             previousOption = gTasks[taskId].tBattleStyle;
             gTasks[taskId].tBattleStyle = BattleStyle_ProcessInput(gTasks[taskId].tBattleStyle);
@@ -355,10 +384,17 @@ static void Task_OptionMenuSave(u8 taskId)
 {
     gSaveBlock2Ptr->optionsTextSpeed = gTasks[taskId].tTextSpeed;
     gSaveBlock2Ptr->optionsBattleSceneOff = gTasks[taskId].tBattleSceneOff;
+    gSaveBlock2Ptr->optionsExpGain = gTasks[taskId].tExpGain;
+    gSaveBlock2Ptr->optionsClockColor = gTasks[taskId].tClockColor;
     gSaveBlock2Ptr->optionsBattleStyle = gTasks[taskId].tBattleStyle;
     gSaveBlock2Ptr->optionsSound = gTasks[taskId].tSound;
     gSaveBlock2Ptr->optionsButtonMode = gTasks[taskId].tButtonMode;
     gSaveBlock2Ptr->optionsWindowFrameType = gTasks[taskId].tWindowFrameType;
+
+    if(gSaveBlock2Ptr->optionsExpGain == 1)
+        FlagSet(FLAG_XP_Gain_0x021);
+    else
+        FlagClear(FLAG_XP_Gain_0x021);
 
     BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 16, RGB_BLACK);
     gTasks[taskId].func = Task_OptionMenuFadeOut;
@@ -465,6 +501,52 @@ static void BattleScene_DrawChoices(u8 selection)
 
     DrawOptionMenuChoice(gText_BattleSceneOn, 104, YPOS_BATTLESCENE, styles[0]);
     DrawOptionMenuChoice(gText_BattleSceneOff, GetStringRightAlignXOffset(FONT_NORMAL, gText_BattleSceneOff, 198), YPOS_BATTLESCENE, styles[1]);
+}
+
+static u8  ExpGain_ProcessInput(u8 selection)
+{
+    if (JOY_NEW(DPAD_LEFT | DPAD_RIGHT))
+    {
+        selection ^= 1;
+        sArrowPressed = TRUE;
+    }
+
+    return selection;
+}
+
+static void ExpGain_DrawChoices(u8 selection)
+{
+    u8 styles[2];
+
+    styles[0] = 0;
+    styles[1] = 0;
+    styles[selection] = 1;
+
+    DrawOptionMenuChoice(gText_ExpGainOn, 104, YPOS_GAINEXP, styles[0]);
+    DrawOptionMenuChoice(gText_ExpGainOff, GetStringRightAlignXOffset(FONT_NORMAL, gText_ExpGainOn, 198), YPOS_GAINEXP, styles[1]);
+}
+
+static u8  ClockColor_ProcessInput(u8 selection)
+{
+    if (JOY_NEW(DPAD_LEFT | DPAD_RIGHT))
+    {
+        selection ^= 1;
+        sArrowPressed = TRUE;
+    }
+
+    return selection;
+}
+
+static void ClockColor_DrawChoices(u8 selection)
+{
+    u8 styles[2];
+
+    styles[0] = 0;
+    styles[1] = 0;
+    styles[selection] = 1;
+
+    DrawOptionMenuChoice(gText_ClockColorBlue, 104, YPOS_CLOCKCOLOR, styles[0]);
+    DrawOptionMenuChoice(gText_ClockColorPink, GetStringRightAlignXOffset(FONT_NORMAL, gText_ClockColorBlue, 198), YPOS_CLOCKCOLOR, styles[1]);
 }
 
 static u8 BattleStyle_ProcessInput(u8 selection)

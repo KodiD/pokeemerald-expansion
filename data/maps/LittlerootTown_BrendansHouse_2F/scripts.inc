@@ -310,7 +310,7 @@ PlayersHouse_2F_TeleportToStart::
 
 PlayersHouse_2F_TotemTest::
     lock
-    setwildbattlesp SPECIES_MANKEY, 3, 50
+    setwildbattlesp SPECIES_MEW, 3, 50, 62, ITEM_FLAME_ORB
 	dowildbattle
     end
 
