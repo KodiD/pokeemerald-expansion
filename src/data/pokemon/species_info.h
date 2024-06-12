@@ -125,7 +125,14 @@ const struct SpeciesInfo gSpeciesInfo[] =
 
     [SPECIES_SWAMPERT_XFORM] =
     { 
-       .catchRate = 45,
+       .baseHP        = 100,
+        .baseAttack    = 110,
+        .baseDefense   = 90,
+        .baseSpeed     = 60,
+        .baseSpAttack  = 85,
+        .baseSpDefense = 90,
+        .types = MON_TYPES(TYPE_WATER, TYPE_GROUND),
+        .catchRate = 45,
     #if P_UPDATED_EXP_YIELDS >= GEN_8
         .expYield = 268,
     #elif P_UPDATED_EXP_YIELDS >= GEN_5

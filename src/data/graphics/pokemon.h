@@ -4021,6 +4021,32 @@ const u8 gMonFootprint_QuestionMark[] = INCBIN_U8("graphics/pokemon/question_mar
     const u32 gMonShinyPalette_SwampertMega[] = INCBIN_U32("graphics/pokemon/swampert/mega/shiny.gbapal.lz");
     const u8 gMonIcon_SwampertMega[] = INCBIN_U8("graphics/pokemon/swampert/mega/icon.4bpp");
 #endif //P_MEGA_EVOLUTIONS
+
+    const u32 gMonFrontPic_Marshtomp_Xform[] = INCBIN_U32("graphics/pokemon/marshtomp/xform/anim_front.4bpp.lz");
+    const u32 gMonPalette_Marshtomp_Xform[] = INCBIN_U32("graphics/pokemon/marshtomp/xform/normal.gbapal.lz");
+    const u32 gMonBackPic_Marshtomp_Xform[] = INCBIN_U32("graphics/pokemon/marshtomp/xform/back.4bpp.lz");
+    const u32 gMonShinyPalette_Marshtomp_Xform[] = INCBIN_U32("graphics/pokemon/marshtomp/xform/shiny.gbapal.lz");
+    const u8 gMonIcon_Marshtomp_Xform[] = INCBIN_U8("graphics/pokemon/marshtomp/xform/icon.4bpp");
+#if P_FOOTPRINTS
+    const u8 gMonFootprint_Marshtomp_Xform[] = INCBIN_U8("graphics/pokemon/marshtomp/xform/footprint.1bpp");
+#endif //P_FOOTPRINTS
+
+    const u32 gMonFrontPic_Swampert_Xform[] = INCBIN_U32("graphics/pokemon/swampert/xform/anim_front.4bpp.lz");
+    const u32 gMonPalette_Swampert_Xform[] = INCBIN_U32("graphics/pokemon/swampert/xform/normal.gbapal.lz");
+    const u32 gMonBackPic_Swampert_Xform[] = INCBIN_U32("graphics/pokemon/swampert/xform/back.4bpp.lz");
+    const u32 gMonShinyPalette_Swampert_Xform[] = INCBIN_U32("graphics/pokemon/swampert/xform/shiny.gbapal.lz");
+    const u8 gMonIcon_Swampert_Xform[] = INCBIN_U8("graphics/pokemon/swampert/xform/icon.4bpp");
+#if P_FOOTPRINTS
+    const u8 gMonFootprint_Swampert_Xform[] = INCBIN_U8("graphics/pokemon/swampert/xform/footprint.1bpp");
+#endif //P_FOOTPRINTS
+
+#if P_MEGA_EVOLUTIONS
+    const u32 gMonFrontPic_SwampertMega_Xform[] = INCBIN_U32("graphics/pokemon/swampert/xform/mega/front.4bpp.lz");
+    const u32 gMonPalette_SwampertMega_Xform[] = INCBIN_U32("graphics/pokemon/swampert/xform/mega/normal.gbapal.lz");
+    const u32 gMonBackPic_SwampertMega_Xform[] = INCBIN_U32("graphics/pokemon/swampert/xform/mega/back.4bpp.lz");
+    const u32 gMonShinyPalette_SwampertMega_Xform[] = INCBIN_U32("graphics/pokemon/swampert/xform/mega/shiny.gbapal.lz");
+    const u8 gMonIcon_SwampertMega_Xform[] = INCBIN_U8("graphics/pokemon/swampert/xform/mega/icon.4bpp");
+#endif //P_MEGA_EVOLUTIONS
 #endif //P_FAMILY_MUDKIP
 
 #if P_FAMILY_POOCHYENA
