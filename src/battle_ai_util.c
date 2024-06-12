@@ -477,8 +477,9 @@ s32 AI_CalcDamage(u32 move, u32 battlerAtk, u32 battlerDef, u8 *typeEffectivenes
     }
     else if (gMovesInfo[move].effect == EFFECT_PHOTON_GEYSER)
         gBattleStruct->swapDamageCategory = (GetCategoryBasedOnStats(gBattlerAttacker) == DAMAGE_CATEGORY_PHYSICAL);
-
-    if (gMovesInfo[move].effect == EFFECT_NATURE_POWER)
+    else if (move == MOVE_SHELL_SIDE_ARM && gBattleStruct->shellSideArmCategory[battlerAtk][battlerDef] == DAMAGE_CATEGORY_SPECIAL)
+        gBattleStruct->swapDamageCategory = TRUE;
+    else if (gMovesInfo[move].effect == EFFECT_NATURE_POWER)
         move = GetNaturePowerMove();
 
     gBattleStruct->dynamicMoveType = 0;
@@ -515,15 +516,23 @@ s32 AI_CalcDamage(u32 move, u32 battlerAtk, u32 battlerDef, u8 *typeEffectivenes
                                              aiData->abilities[battlerAtk], aiData->abilities[battlerDef]);
 
         critChanceIndex = CalcCritChanceStageArgs(battlerAtk, battlerDef, move, FALSE, aiData->abilities[battlerAtk], aiData->abilities[battlerDef], aiData->holdEffects[battlerAtk]);
-        if (critChanceIndex > 1) // Consider crit damage only if a move has at least +1 crit chance
+        if (critChanceIndex > 1) // Consider crit damage only if a move has at least +2 crit chance
         {
             s32 critDmg = CalculateMoveDamageVars(move, battlerAtk, battlerDef, moveType, fixedBasePower,
                                              effectivenessMultiplier, weather, TRUE,
                                              aiData->holdEffects[battlerAtk], aiData->holdEffects[battlerDef],
                                              aiData->abilities[battlerAtk], aiData->abilities[battlerDef]);
-            u32 critChance = GetCritHitChance(critChanceIndex);
-            // With critChance getting closer to 1, dmg gets closer to critDmg.
-            dmg = LowestRollDmg((critDmg + normalDmg * (critChance - 1)) / (critChance));
+            u32 critOdds = GetCritHitOdds(critChanceIndex); // Crit chance is 1/critOdds
+            // With critOdds getting closer to 1, dmg gets closer to critDmg.
+            dmg = LowestRollDmg((critDmg + normalDmg * (critOdds - 1)) / (critOdds));
+        }
+        else if (critChanceIndex == -2) // Guaranteed critical
+        {
+            s32 critDmg = CalculateMoveDamageVars(move, battlerAtk, battlerDef, moveType, fixedBasePower,
+                                             effectivenessMultiplier, weather, TRUE,
+                                             aiData->holdEffects[battlerAtk], aiData->holdEffects[battlerDef],
+                                             aiData->abilities[battlerAtk], aiData->abilities[battlerDef]);
+            dmg = LowestRollDmg(critDmg);
         }
         else
         {
@@ -1076,6 +1085,8 @@ bool32 AI_IsAbilityOnSide(u32 battlerId, u32 ability)
 // does NOT include ability suppression checks
 s32 AI_DecideKnownAbilityForTurn(u32 battlerId)
 {
+    u32 validAbilities[NUM_ABILITY_SLOTS];
+    u8 i, numValidAbilities = 0;
     u32 knownAbility = GetBattlerAbility(battlerId);
 
     // We've had ability overwritten by e.g. Worry Seed. It is not part of AI_PARTY in case of switching
@@ -1097,17 +1108,14 @@ s32 AI_DecideKnownAbilityForTurn(u32 battlerId)
     if (knownAbility == ABILITY_SHADOW_TAG || knownAbility == ABILITY_MAGNET_PULL || knownAbility == ABILITY_ARENA_TRAP)
         return knownAbility;
 
-    // Else, guess the ability
-    if (gSpeciesInfo[gBattleMons[battlerId].species].abilities[0] != ABILITY_NONE)
+    for (i = 0; i < NUM_ABILITY_SLOTS; i++)
     {
-        u32 abilityGuess = ABILITY_NONE;
-        while (abilityGuess == ABILITY_NONE)
-        {
-            abilityGuess = gSpeciesInfo[gBattleMons[battlerId].species].abilities[Random() % NUM_ABILITY_SLOTS];
-        }
-
-        return abilityGuess;
+        if (gSpeciesInfo[gBattleMons[battlerId].species].abilities[i] != ABILITY_NONE)
+            validAbilities[numValidAbilities++] = gSpeciesInfo[gBattleMons[battlerId].species].abilities[i];
     }
+
+    if (numValidAbilities > 0)
+        return validAbilities[RandomUniform(RNG_AI_ABILITY, 0, numValidAbilities - 1)];
 
     return ABILITY_NONE; // Unknown.
 }
