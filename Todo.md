@@ -16,7 +16,7 @@
     xx setup level cap
     x/- auto switch to lowercase after first Letter
     - Create themed UI and Menus Graphics
-    - Turbo a on THE R Button
+    x Turbo a on THE R Button
     x/- water electric marshstomp and swampert
 
 ## Project to Fix:
@@ -44,3 +44,4 @@
     x- make 6 pokeballs for starter selection
     x/- Add a Confirmation y/n to exiting the IV/EV Editor
     - add option menu scroll
+    - add grey/black clock color choice
