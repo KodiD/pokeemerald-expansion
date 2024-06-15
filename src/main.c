@@ -315,6 +315,13 @@ static void ReadKeys(void)
     gMain.heldKeysRaw = keyInput;
     gMain.heldKeys = gMain.heldKeysRaw;
 
+    if (JOY_HELD(R_BUTTON))
+    {
+        gMain.heldKeys |= A_BUTTON;
+        gMain.newKeys ^= A_BUTTON;
+    }
+
+
     // Remap L to A if the L=A option is enabled.
     if (gSaveBlock2Ptr->optionsButtonMode == OPTIONS_BUTTON_MODE_L_EQUALS_A)
     {
