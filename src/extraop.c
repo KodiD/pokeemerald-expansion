@@ -1,180 +1,319 @@
 #include "global.h"
-#include "list_menu.h"
-#include "main.h"
-#include "overworld.h"
-#include "map_name_popup.h"
-#include "menu.h"
-#include "script.h"
+#include "battle_pike.h"
+#include "battle_pyramid.h"
+#include "battle_pyramid_bag.h"
+#include "bg.h"
+#include "debug.h"
 #include "event_data.h"
-#include "sound.h"
-#include "strings.h"
-#include "task.h"
-#include "constants/songs.h"
+#include "extraop.h"
+#include "event_object_movement.h"
+#include "event_object_lock.h"
+#include "event_scripts.h"
+#include "fieldmap.h"
+#include "field_effect.h"
+#include "field_player_avatar.h"
+#include "field_specials.h"
+#include "field_weather.h"
+#include "field_screen_effect.h"
+#include "frontier_pass.h"
+#include "frontier_util.h"
+#include "gpu_regs.h"
+#include "international_string_util.h"
+#include "item_menu.h"
+#include "link.h"
+#include "load_save.h"
+#include "main.h"
+#include "menu.h"
+#include "new_game.h"
+#include "option_menu.h"
+#include "overworld.h"
+#include "palette.h"
+#include "party_menu.h"
+#include "pokedex.h"
+#include "pokenav.h"
+#include "safari_zone.h"
+#include "save.h"
+#include "scanline_effect.h"
 #include "script_pokemon_util.h"
-#include "ui_stat_editor.h"
+#include "script.h"
+#include "sound.h"
+#include "start_menu.h"
+#include "strings.h"
+#include "string_util.h"
+#include "task.h"
+#include "text.h"
+#include "text_window.h"
+#include "trainer_card.h"
+#include "window.h"
+#include "union_room.h"
+#include "constants/battle_frontier.h"
+#include "constants/rgb.h"
+#include "constants/songs.h"
 
-#define EXTRAOP_MAIN_MENU_HEIGHT 7
-#define EXTRAOP_MAIN_MENU_WIDTH 13
-
-extern const u8 ExtraOp_EventScript_EXP_On[];
-extern const u8 ExtraOp_EventScript_EXP_Off[];
-extern const u8 ExtraOp_EventScript_HealingStone[];
-extern const u8 ExtraOp_EventScript_HealingNoCharge[];
-
-void ExtraOp_ShowMainMenu(void);
-static void ExtraOp_DestroyMainMenu(u8);
-static void ExtraOpAction_Cancel(u8);
-static void ExtraOpAction_ExpGain(u8);
-static void ExtraOpAction_Healing_Stone(u8);
-static void ExtraOpAction_RespecEV(u8);
-static void ExtraOpAction_RespecIV(u8);
-static void ExtraOpTask_HandleMainMenuInput(u8);
-
-enum {
-    EXTRAOP_MENU_ITEM_EXPGAIN,
-    EXTRAOP_MENU_ITEM_HEALINGSTONE,
-    EXTRAOP_MENU_ITEM_RESPECEV,
-    EXTRAOP_MENU_ITEM_RESPECIV,
-    EXTRAOP_MENU_ITEM_CANCEL,
+// Menu actions
+enum
+{
+    MENU_ACTION_HEAL,
+    MENU_ACTION_REPEL,
+    MENU_ACTION_WAIT,
+    MENU_ACTION_EXIT,
 };
 
-static const u8 gExtraOpText_ExpGain[] = _("Toggle Exp. Gain");
-static const u8 gExtraOpText_HealingStone[] = _("Use Healing Stone");
-static const u8 gExtraOpText_RespecEV[] = _("Toggle Dynamax");
-static const u8 gExtraOpText_RespecIV[] = _("Respec Mon IV");
-static const u8 gExtraOpText_Cancel[] = _("Exit");
 
-static const struct ListMenuItem sExtraOpMenuItems[] =
-{
-    [EXTRAOP_MENU_ITEM_EXPGAIN] = {gExtraOpText_ExpGain, EXTRAOP_MENU_ITEM_EXPGAIN},
-    [EXTRAOP_MENU_ITEM_HEALINGSTONE] = {gExtraOpText_HealingStone, EXTRAOP_MENU_ITEM_HEALINGSTONE},
-    [EXTRAOP_MENU_ITEM_RESPECEV] = {gExtraOpText_RespecEV, EXTRAOP_MENU_ITEM_RESPECEV},
-    [EXTRAOP_MENU_ITEM_RESPECIV] = {gExtraOpText_RespecIV, EXTRAOP_MENU_ITEM_RESPECIV},
-    [EXTRAOP_MENU_ITEM_CANCEL] = {gExtraOpText_Cancel, EXTRAOP_MENU_ITEM_CANCEL},
-};
+// IWRAM common
+bool8 (*gMenuCallbackE)(void);
 
-static void (*const sExtraOpMenuActions[])(u8) =
-{
-    [EXTRAOP_MENU_ITEM_EXPGAIN] = ExtraOpAction_ExpGain,
-    [EXTRAOP_MENU_ITEM_HEALINGSTONE] = ExtraOpAction_Healing_Stone,
-    [EXTRAOP_MENU_ITEM_RESPECEV] = ExtraOpAction_RespecEV,
-    [EXTRAOP_MENU_ITEM_RESPECIV] = ExtraOpAction_RespecIV,
-    [EXTRAOP_MENU_ITEM_CANCEL] = ExtraOpAction_Cancel,
-};
+// EWRAM
+EWRAM_DATA static u8 sStartMenuCursorPos = 0;
+EWRAM_DATA static u8 sNumStartMenuActions = 0;
+EWRAM_DATA static u8 sCurrentStartMenuActions[9] = {0};
+EWRAM_DATA static s8 sInitStartMenuData[2] = {0};
+EWRAM_DATA static u32 sExtraWindowId = 0;
 
-static const struct WindowTemplate sExtraOpMenuWindowTemplate =
-{
+// Menu action callbacks
+static bool8 ExtraMenuHealCallback(void);
+static bool8 ExtraMenuRepelCallback(void);
+static bool8 ExtraMenuWaitCallback(void);
+static bool8 ExtraMenuExitCallback(void);
+
+// Menu callbacks
+static bool8 HandleStartMenuInput(void);
+
+// Task callbacks
+static void StartMenuTask(u8 taskId);
+static bool8 FieldCB_ReturnToFieldStartMenu(void);
+
+static const struct WindowTemplate sExtraMenuWindowTemp = {
     .bg = 0,
     .tilemapLeft = 1,
     .tilemapTop = 1,
-    .width = EXTRAOP_MAIN_MENU_WIDTH,
-    .height = 2 * EXTRAOP_MAIN_MENU_HEIGHT,
+    .width = 13,
+    .height = 9,
     .paletteNum = 15,
-    .baseBlock = 1,
+    .baseBlock = 0x8
 };
 
-static const struct ListMenuTemplate sExtraOpMenuListTemplate =
+extern const u8 ExtraOp_EventScript_HealingStone[];
+extern const u8 ExtraOp_EventScript_HealingNoCharge[];
+extern const u8 ExtraOp_EventScript_RepelOff[];
+extern const u8 ExtraOp_EventScript_RepelOn[];
+extern const u8 PlayersHouse_2F_EventScript_SetWallClock[];
+static const u8 gExtraOpText_HealingStone[] =   _("Use Healing Stone");
+static const u8 gExtraOpText_RepelCharm[] =     _("Toggle Repel Charm");
+static const u8 gExtraOpText_Wait[] =           _("Wait");
+static const u8 gExtraOpText_Exit[] =           _("Exit");
+
+
+static const struct MenuAction sStartMenuItems[] =
 {
-    .items = sExtraOpMenuItems,
-    .moveCursorFunc = ListMenuDefaultCursorMoveFunc,
-    .totalItems = ARRAY_COUNT(sExtraOpMenuItems),
-    .maxShowed = EXTRAOP_MAIN_MENU_HEIGHT,
-    .windowId = 0,
-    .header_X = 0,
-    .item_X = 8,
-    .cursor_X = 0,
-    .upText_Y = 1,
-    .cursorPal = 2,
-    .fillValue = 1,
-    .cursorShadowPal = 3,
-    .lettersSpacing = 1,
-    .itemVerticalPadding = 0,
-    .scrollMultiple = LIST_NO_MULTIPLE_SCROLL,
-    .fontId = 1,
-    .cursorKind = 0
+    [MENU_ACTION_HEAL]              = {gExtraOpText_HealingStone,     {.u8_void = ExtraMenuHealCallback}},
+    [MENU_ACTION_REPEL]             = {gExtraOpText_RepelCharm,       {.u8_void = ExtraMenuRepelCallback}},
+    [MENU_ACTION_WAIT]              = {gExtraOpText_Wait,             {.u8_void = ExtraMenuWaitCallback}},
+    [MENU_ACTION_EXIT]              = {gExtraOpText_Exit,             {.u8_void = ExtraMenuExitCallback}},
 };
 
-void ExtraOp_ShowMainMenu(void) {
-    struct ListMenuTemplate menuTemplate;
-    u8 windowId;
-    u8 menuTaskId;
-    u8 inputTaskId;
 
-    // create window
-    HideMapNamePopUpWindow();
-    LoadMessageBoxAndBorderGfx();
-    windowId = AddWindow(&sExtraOpMenuWindowTemplate);
-    DrawStdWindowFrame(windowId, FALSE);
+// Local functions
+static void BuildStartMenuActions(void);
+static void AddStartMenuAction(u8 action);
+static void BuildNormalStartMenu(void);
+static bool32 PrintStartMenuActions(s8 *pIndex, u32 count);
+static bool32 InitStartMenuStep(void);
+static void InitStartMenu(void);
+static void CreateStartMenuTask(TaskFunc followupFunc);
+static void HideStartMenuWindow(void);
 
-    // create list menu
-    menuTemplate = sExtraOpMenuListTemplate;
-    menuTemplate.windowId = windowId;
-    menuTaskId = ListMenuInit(&menuTemplate, 0, 0);
-
-    // draw everything
-    CopyWindowToVram(windowId, 3);
-
-    // create input handler task
-    inputTaskId = CreateTask(ExtraOpTask_HandleMainMenuInput, 3);
-    gTasks[inputTaskId].data[0] = menuTaskId;
-    gTasks[inputTaskId].data[1] = windowId;
+static void BuildStartMenuActions(void)
+{
+    sNumStartMenuActions = 0;
+            BuildNormalStartMenu();
 }
 
-static void ExtraOp_DestroyMainMenu(u8 taskId)
+static void AddStartMenuAction(u8 action)
 {
-    DestroyListMenuTask(gTasks[taskId].data[0], NULL, NULL);
-    ClearStdWindowAndFrame(gTasks[taskId].data[1], TRUE);
-    RemoveWindow(gTasks[taskId].data[1]);
-    DestroyTask(taskId);
+    AppendToListE(sCurrentStartMenuActions, &sNumStartMenuActions, action);
 }
 
-static void ExtraOpTask_HandleMainMenuInput(u8 taskId)
+static void BuildNormalStartMenu(void)
 {
-    void (*func)(u8);
-    u32 input = ListMenu_ProcessInput(gTasks[taskId].data[0]);
+
+    if (FlagGet(FLAG_SYS_HEALSTONE_GET) == TRUE)
+    {
+        AddStartMenuAction(MENU_ACTION_HEAL);
+    }
+    if (FlagGet(FLAG_SYS_REPELCHARM_GET) == TRUE)
+    {
+        AddStartMenuAction(MENU_ACTION_REPEL);
+    }
+    AddStartMenuAction(MENU_ACTION_WAIT);
+    AddStartMenuAction(MENU_ACTION_EXIT);
+}
+
+static bool32 PrintStartMenuActions(s8 *pIndex, u32 count)
+{
+    s8 index = *pIndex;
+
+    do
+    {
+            StringExpandPlaceholders(gStringVar4, sStartMenuItems[sCurrentStartMenuActions[index]].text);
+            AddTextPrinterParameterized(sExtraWindowId, FONT_NORMAL, gStringVar4, 8, (index << 4) + 3, TEXT_SKIP_DRAW, NULL);
+
+        index++;
+        if (index >= sNumStartMenuActions)
+        {
+            *pIndex = index;
+            return TRUE;
+        }
+
+        count--;
+    }
+    while (count != 0);
+
+    *pIndex = index;
+    return FALSE;
+}
+
+static bool32 InitStartMenuStep(void)
+{
+    s8 state = sInitStartMenuData[0];
+
+    switch (state)
+    {
+    case 0:
+        sInitStartMenuData[0]++;
+        break;
+    case 1:
+        BuildStartMenuActions();
+        sInitStartMenuData[0]++;
+        break;
+    case 2:
+        LoadMessageBoxAndBorderGfx();
+
+        sExtraWindowId = AddWindow(&sExtraMenuWindowTemp);
+        DrawStdWindowFrame(sExtraWindowId, FALSE);
+        sInitStartMenuData[1] = 0;
+        sInitStartMenuData[0]++;
+        break;
+    case 3:
+        sInitStartMenuData[0]++;
+        break;
+    case 4:
+        if (PrintStartMenuActions(&sInitStartMenuData[1], 2))
+            sInitStartMenuData[0]++;
+        break;
+    case 5:
+        sStartMenuCursorPos = InitMenuNormal(sExtraWindowId, FONT_NORMAL, 0, 4, 16, sNumStartMenuActions, sStartMenuCursorPos);
+        CopyWindowToVram(sExtraWindowId, COPYWIN_MAP);
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
+static void InitStartMenu(void)
+{
+    sInitStartMenuData[0] = 0;
+    sInitStartMenuData[1] = 0;
+    while (!InitStartMenuStep())
+        ;
+}
+
+static void StartMenuTask(u8 taskId)
+{
+    if (InitStartMenuStep() == TRUE)
+        SwitchTaskToFollowupFunc(taskId);
+}
+
+static void CreateStartMenuTask(TaskFunc followupFunc)
+{
+    u8 taskId;
+
+    sInitStartMenuData[0] = 0;
+    sInitStartMenuData[1] = 0;
+    taskId = CreateTask(StartMenuTask, 0x50);
+    SetTaskFuncWithFollowupFunc(taskId, StartMenuTask, followupFunc);
+}
+
+static bool8 FieldCB_ReturnToFieldStartMenu(void)
+{
+    if (InitStartMenuStep() == FALSE)
+    {
+        return FALSE;
+    }
+
+    ReturnToFieldOpenStartMenu();
+    return TRUE;
+}
+
+void ShowReturnToFieldStartMenuE(void)
+{
+    sInitStartMenuData[0] = 0;
+    sInitStartMenuData[1] = 0;
+    gFieldCallback2 = FieldCB_ReturnToFieldStartMenu;
+}
+
+void Task_ShowExtraMenu(u8 taskId)
+{
+    struct Task *task = &gTasks[taskId];
+
+    switch(task->data[0])
+    {
+    case 0:
+        gMenuCallbackE = HandleStartMenuInput;
+        task->data[0]++;
+        break;
+    case 1:
+        if (gMenuCallbackE() == TRUE)
+            DestroyTask(taskId);
+        break;
+    }
+}
+
+void ShowExtraMenu(void)
+{
+    FreezeObjectEvents();
+    PlayerFreeze();
+    StopPlayerAvatar();
+    CreateStartMenuTask(Task_ShowExtraMenu);
+    LockPlayerFieldControls();
+}
+
+static bool8 HandleStartMenuInput(void)
+{
+    if (JOY_NEW(DPAD_UP))
+    {
+        PlaySE(SE_SELECT);
+        sStartMenuCursorPos = Menu_MoveCursor(-1);
+    }
+
+    if (JOY_NEW(DPAD_DOWN))
+    {
+        PlaySE(SE_SELECT);
+        sStartMenuCursorPos = Menu_MoveCursor(1);
+    }
 
     if (JOY_NEW(A_BUTTON))
     {
         PlaySE(SE_SELECT);
-        if ((func = sExtraOpMenuActions[input]) != NULL)
-            func(taskId);
+
+        gMenuCallbackE = sStartMenuItems[sCurrentStartMenuActions[sStartMenuCursorPos]].func.u8_void;
+
+        return FALSE;
     }
-    // else if (JOY_NEW(B_BUTTON | L_BUTTON))
-    // {
-    //     PlaySE(SE_SELECT);
-    //     ExtraOp_DestroyMainMenu(taskId);
-    //     ScriptContext_Enable();
-    // }
-    else if (JOY_NEW(B_BUTTON))
+
+    if (JOY_NEW(L_BUTTON | B_BUTTON))
     {
-        PlaySE(SE_SELECT);
-        ExtraOp_DestroyMainMenu(taskId);
-        ScriptContext_Enable();
+        HideStartMenuE();
+        return TRUE;
     }
+
+    return FALSE;
 }
 
-static void ExtraOpAction_Cancel(u8 taskId)
-{
-    ExtraOp_DestroyMainMenu(taskId);
-    ScriptContext_Enable();
-}
-
-static void ExtraOpAction_ExpGain(u8 taskId)
+static bool8 ExtraMenuHealCallback(void)
 {
     PlaySE(SE_USE_ITEM);
-    FlagToggle(FLAG_XP_Gain_0x021);
-    ExtraOp_DestroyMainMenu(taskId);
 
-    if(FlagGet(FLAG_XP_Gain_0x021)){
-        ScriptContext_SetupScript(ExtraOp_EventScript_EXP_Off);
-    }else{
-        ScriptContext_SetupScript(ExtraOp_EventScript_EXP_On);
-    }
-    ScriptContext_Enable();
-}
-
-static void ExtraOpAction_Healing_Stone(u8 taskId)
-{
     if (VarGet(VAR_HEALINGCHARGE_0x40F7)>0){
         VarSet(VAR_HEALINGCHARGE_0x40F7,VarGet(VAR_HEALINGCHARGE_0x40F7)-1);
         HealPlayerParty();
@@ -183,28 +322,61 @@ static void ExtraOpAction_Healing_Stone(u8 taskId)
         ScriptContext_SetupScript(ExtraOp_EventScript_HealingNoCharge);
     }
 
-    ExtraOp_DestroyMainMenu(taskId);
-    ScriptContext_Enable();
+    HideStartMenuE(); // Hide start menu
+    return TRUE;
 }
 
-// Used for testing now
-static void ExtraOpAction_RespecEV(u8 taskId)
+
+static bool8 ExtraMenuRepelCallback(void)
 {
-    FlagToggle(FLAG_UNUSED_0x493);
-    if(FlagGet(FLAG_UNUSED_0x493)){
-        ScriptContext_SetupScript(ExtraOp_EventScript_EXP_On);
-    }else{
-        ScriptContext_SetupScript(ExtraOp_EventScript_EXP_Off);
+    bool8 repelCharmOn = FlagGet(FLAG_REPEL_0x020);
+    FlagToggle(FLAG_REPEL_0x020);
+    if(repelCharmOn)
+    {
+        PlaySE(SE_REPEL);
+        ScriptContext_SetupScript(ExtraOp_EventScript_RepelOff);
     }
-    ExtraOp_DestroyMainMenu(taskId);
-    ScriptContext_Enable();
+    else
+    {
+        PlaySE(SE_PC_OFF);
+        ScriptContext_SetupScript(ExtraOp_EventScript_RepelOn);
+    }
+       
+
+    HideStartMenuE(); // Hide start menu
+    return TRUE;
 }
 
+static bool8 ExtraMenuWaitCallback(void)
+{
+    ScriptContext_SetupScript(PlayersHouse_2F_EventScript_SetWallClock);
+    HideStartMenuE(); // Hide start menu
+    return TRUE;
+}
 
-//use for testing now
-static void ExtraOpAction_RespecIV(u8 taskId)
+static bool8 ExtraMenuExitCallback(void)
+{
+    HideStartMenuE(); // Hide start menu
+
+    return TRUE;
+}
+
+static void HideStartMenuWindow(void)
+{
+    ClearStdWindowAndFrame(sExtraWindowId, TRUE);
+    RemoveWindow(sExtraWindowId);
+    ScriptUnfreezeObjectEvents();
+    UnlockPlayerFieldControls();
+}
+
+void HideStartMenuE(void)
 {
     PlaySE(SE_SELECT);
-    gSpecialVar_0x8004 = 0;
-    CreateTask(Task_OpenToEditIV, 0);
+    HideStartMenuWindow();
+}
+
+void AppendToListE(u8 *list, u8 *pos, u8 newEntry)
+{
+    list[*pos] = newEntry;
+    (*pos)++;
 }

@@ -4414,10 +4414,10 @@
     {
       "id": "LAYOUT_NEW_MAP1",
       "name": "NewMap1_Layout",
-      "width": 20,
-      "height": 20,
+      "width": 19,
+      "height": 24,
       "primary_tileset": "gTileset_General",
-      "secondary_tileset": "gTileset_BattleDome",
+      "secondary_tileset": "gTileset_Petalburg",
       "border_filepath": "data/layouts/NewMap1/border.bin",
       "blockdata_filepath": "data/layouts/NewMap1/map.bin"
     },
@@ -4430,6 +4430,46 @@
       "secondary_tileset": "gTileset_MeteorFalls",
       "border_filepath": "data/layouts/StartingCave/border.bin",
       "blockdata_filepath": "data/layouts/StartingCave/map.bin"
+    },
+    {
+      "id": "LAYOUT_NEW_MAP0",
+      "name": "NewMap0_Layout",
+      "width": 56,
+      "height": 30,
+      "primary_tileset": "gTileset_General",
+      "secondary_tileset": "gTileset_Dewford",
+      "border_filepath": "data/layouts/NewMap0/border.bin",
+      "blockdata_filepath": "data/layouts/NewMap0/map.bin"
+    },
+    {
+      "id": "LAYOUT_NEW_MAP2",
+      "name": "NewMap2_Layout",
+      "width": 52,
+      "height": 64,
+      "primary_tileset": "gTileset_General",
+      "secondary_tileset": "gTileset_Petalburg",
+      "border_filepath": "data/layouts/NewMap2/border.bin",
+      "blockdata_filepath": "data/layouts/NewMap2/map.bin"
+    },
+    {
+      "id": "LAYOUT_NEW_MAP3",
+      "name": "NewMap3_Layout",
+      "width": 60,
+      "height": 66,
+      "primary_tileset": "gTileset_General",
+      "secondary_tileset": "gTileset_Mauville",
+      "border_filepath": "data/layouts/NewMap3/border.bin",
+      "blockdata_filepath": "data/layouts/NewMap3/map.bin"
+    },
+    {
+      "id": "LAYOUT_NEW_MAP4LEFT",
+      "name": "NewMap4Left_Layout",
+      "width": 20,
+      "height": 80,
+      "primary_tileset": "gTileset_General",
+      "secondary_tileset": "gTileset_Mauville",
+      "border_filepath": "data/layouts/NewMap4Left/border.bin",
+      "blockdata_filepath": "data/layouts/NewMap4Left/map.bin"
     }
   ]
 }

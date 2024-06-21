@@ -8,6 +8,10 @@
 // gMapGroup_MyMaps
 #define MAP_NEW_MAP1      (0 | (0 << 8))
 #define MAP_STARTING_CAVE (1 | (0 << 8))
+#define MAP_NEW_MAP0      (2 | (0 << 8))
+#define MAP_NEW_MAP2      (3 | (0 << 8))
+#define MAP_NEW_MAP3      (4 | (0 << 8))
+#define MAP_NEW_MAP4LEFT  (5 | (0 << 8))
 
 // gMapGroup_TownsAndRoutes
 #define MAP_PETALBURG_CITY      (0 | (1 << 8))

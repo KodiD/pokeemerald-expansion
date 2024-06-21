@@ -505,8 +505,8 @@ static const u8 sDebugText_Sound[] =         _("Sound…{CLEAR_TO 110}{RIGHT_ARR
 static const u8 sDebugText_Cancel[] =        _("Cancel");
 // Script menu
 static const u8 sDebugText_Util_Script_1[] = _("Script 1");
-static const u8 sDebugText_Util_Script_2[] = _("Script 2");
-static const u8 sDebugText_Util_Script_3[] = _("Script 3");
+static const u8 sDebugText_Util_Script_2[] = _("Warp my game");
+static const u8 sDebugText_Util_Script_3[] = _("Warp main game");
 static const u8 sDebugText_Util_Script_4[] = _("Script 4");
 static const u8 sDebugText_Util_Script_5[] = _("Script 5");
 static const u8 sDebugText_Util_Script_6[] = _("Script 6");
@@ -872,6 +872,9 @@ static void (*const sDebugMenu_Actions_Main[])(u8) =
     [DEBUG_MENU_ITEM_SOUND]         = DebugAction_OpenSoundMenu,
     [DEBUG_MENU_ITEM_CANCEL]        = DebugAction_Cancel
 };
+
+extern const u8 Debug_Warp_MainGame[];
+extern const u8 Debug_Warp_MyMaps[];
 
 static void (*const sDebugMenu_Actions_Utilities[])(u8) =
 {
@@ -2359,24 +2362,32 @@ void BufferExpansionVersion(struct ScriptContext *ctx)
 // Actions Scripts
 static void DebugAction_Util_Script_1(u8 taskId)
 {
+    ScriptGiveEgg(SPECIES_AIPOM);
     AddBagItem(ITEM_REPEL_CHARM, 1);
     AddBagItem(ITEM_IV_STONE, 20);
     AddBagItem(ITEM_EV_STONE, 20);
     AddBagItem(ITEM_LEVEL_STONE, 1);
     AddBagItem(ITEM_MEGA_RING, 1);
     AddBagItem(ITEM_CHARIZARDITE_X, 1);
-    AddBagItem(ITEM_RARE_CANDY, 200);
+    AddBagItem(ITEM_SWAMPERTITE, 1);
+    AddBagItem(ITEM_EXP_CAP_CORE_RE, 1);
+     AddBagItem(ITEM_EXP_CAP_CORE, 200);
+    AddBagItem(ITEM_MASTER_BALL, 200);
     Debug_DestroyMenu_Full_Script(taskId, Debug_EventScript_Script_1);
+    FlagSet(FLAG_SYS_HEALSTONE_GET);
+    FlagSet(FLAG_SYS_REPELCHARM_GET);
+    FlagSet(FLAG_CAN_RELEARN);
+    FlagSet(FLAG_SYS_B_DASH);
 }
 
 static void DebugAction_Util_Script_2(u8 taskId)
 {
-    Debug_DestroyMenu_Full_Script(taskId, Debug_EventScript_Script_2);
+    ScriptContext_SetupScript(Debug_Warp_MyMaps);
 }
 
 static void DebugAction_Util_Script_3(u8 taskId)
 {
-    Debug_DestroyMenu_Full_Script(taskId, Debug_EventScript_Script_3);
+    ScriptContext_SetupScript(Debug_Warp_MainGame);
 }
 
 static void DebugAction_Util_Script_4(u8 taskId)
@@ -3997,8 +4008,8 @@ static void DebugAction_Give_Pokemon_ComplexCreateMon(u8 taskId) //https://githu
             abilityNum = Random() % 3;  // includes hidden abilities
         } while (GetAbilityBySpecies(species, abilityNum) == 0);
     }
-
-    SetMonData(&mon, MON_DATA_ABILITY_NUM, &abilityNum);
+    u16 ab = gSpeciesInfo[GetMonData(&mon, MON_DATA_SPECIES)].abilities[abilityNum];
+    SetMonData(&mon, MON_DATA_ABILITY_NUM, &ab);
 
     //Update mon stats before giving it to the player
     CalculateMonStats(&mon);

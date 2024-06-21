@@ -1795,6 +1795,42 @@ const struct Item gItemsInfo[] =
         .flingPower = 30,
     },
 
+    [ITEM_EXP_CAP_CORE_RE] =
+    {
+        .name = _("Exp. Cap Core"),
+        .pluralName = _("Exp. Cap Cores"),
+        .price = 0,
+        .holdEffectParam = EXP_X,
+        .description = COMPOUND_STRING(
+            "Gives enough Exp. to\n"
+            "a Pokemon to raise it\n"
+            "to the next Level cap"),
+        .importance = 1,
+        .pocket = POCKET_KEY_ITEMS,
+        .type = ITEM_USE_PARTY_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_RareCandy,
+        .effect = gItemEffect_RareCandy,
+        .flingPower = 30,
+    },
+    
+        [ITEM_EXP_CAP_CORE] =
+    {
+        .name = _("Exp. Cap Core"),
+        .pluralName = _("Exp. Cap Cores"),
+        .price = 15000,
+        .holdEffectParam = EXP_X,
+        .description = COMPOUND_STRING(
+            "Gives enough Exp. to\n"
+            "a Pokemon to raise it\n"
+            "to the next Level cap"),
+        .pocket = POCKET_ITEMS,
+        .type = ITEM_USE_PARTY_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_RareCandy,
+        .effect = gItemEffect_RareCandy,
+        .flingPower = 30,
+    },
+
+
     [ITEM_DYNAMAX_CANDY] =
     {
         .name = _("DynamaxCandy"),
@@ -11156,8 +11192,8 @@ const struct Item gItemsInfo[] =
         .importance = 1,
         .pocket = POCKET_KEY_ITEMS,
         .type = ITEM_USE_PARTY_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_RareCandy,
         .effect = gItemEffect_RareCandy,
-        .fieldUseFunc = ItemUseOutOfBattle_LevelStone,
     },
 
     [ITEM_POWDER_JAR] =

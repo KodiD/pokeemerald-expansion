@@ -38,7 +38,11 @@
   ],
   "gMapGroup_MyMaps": [
     "NewMap1",
-    "StartingCave"
+    "StartingCave",
+    "NewMap0",
+    "NewMap2",
+    "NewMap3",
+    "NewMap4Left"
   ],
   "gMapGroup_TownsAndRoutes": [
     "PetalburgCity",

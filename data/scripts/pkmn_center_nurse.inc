@@ -121,3 +121,24 @@ Movement_PkmnCenterNurse_Bow:
 	nurse_joy_bow
 	delay_4
 	step_end
+
+
+Common_EventScript_MageHeal::
+	lock
+	faceplayer
+	msgbox gText_WouldYouLikeToRestYourPkmn, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, YES, EventScript_MageHeal_HealPkmn
+	goto_if_eq VAR_RESULT, NO, EventScript_HealMage_Goodbye
+	end
+
+EventScript_MageHeal_HealPkmn::
+	incrementgamestat GAME_STAT_USED_POKECENTER
+	special HealPlayerParty
+	setvar VAR_HEALINGCHARGE_0x40F7, OW_HEALINGMAXCHARGE
+	msgbox gText_RestoredPkmnToFullHealth, MSGBOX_AUTOCLOSE
+	end
+
+EventScript_HealMage_Goodbye::
+	msgbox gText_WeHopeToSeeYouAgain, MSGBOX_AUTOCLOSE
+	return
+

@@ -2212,6 +2212,13 @@ u8 CreateNPCTrainerPartyFromTrainer(struct Pokemon *party, const struct Trainer 
     u32 personalityValue;
     s32 i;
     u8 monsCount;
+    u8 playerLevel = 0;
+
+    for(int id = 0; id < gPlayerPartyCount; id++){
+        if(playerLevel < GetMonData(&gPlayerParty[id],MON_DATA_LEVEL))
+            playerLevel = GetMonData(&gPlayerParty[id],MON_DATA_LEVEL);
+    }
+
     if (battleTypeFlags & BATTLE_TYPE_TRAINER && !(battleTypeFlags & (BATTLE_TYPE_FRONTIER
                                                                         | BATTLE_TYPE_EREADER_TRAINER
                                                                         | BATTLE_TYPE_TRAINER_HILL)))
@@ -2258,7 +2265,28 @@ u8 CreateNPCTrainerPartyFromTrainer(struct Pokemon *party, const struct Trainer 
                 otIdType = OT_ID_PRESET;
                 fixedOtId = HIHALF(personalityValue) ^ LOHALF(personalityValue);
             }
-            CreateMon(&party[i], partyData[i].species, partyData[i].lvl, 0, TRUE, personalityValue, otIdType, fixedOtId);
+            u8 levelNum = 1;
+            if(!partyData[i].isDynamicLevel)
+            {
+                CreateMon(&party[i], partyData[i].species, partyData[i].lvl, 0, TRUE, personalityValue, otIdType, fixedOtId);
+            }
+            else
+            {
+                u8 newLevel = (playerLevel + partyData[i].lvl);
+                if(newLevel < 1){
+                    levelNum = 1;
+                }
+                else if (newLevel <= 100)
+                {
+                    levelNum = newLevel;
+                }
+                else
+                {
+                    levelNum = 100;
+                }
+                CreateMon(&party[i], partyData[i].species, levelNum, 0, TRUE, personalityValue, otIdType, fixedOtId);
+            }
+            
             SetMonData(&party[i], MON_DATA_HELD_ITEM, &partyData[i].heldItem);
 
             CustomTrainerPartyAssignMoves(&party[i], &partyData[i]);
@@ -2274,15 +2302,8 @@ u8 CreateNPCTrainerPartyFromTrainer(struct Pokemon *party, const struct Trainer 
             }
             if (partyData[i].ability != ABILITY_NONE)
             {
-                const struct SpeciesInfo *speciesInfo = &gSpeciesInfo[partyData[i].species];
-                u32 maxAbilities = ARRAY_COUNT(speciesInfo->abilities);
-                for (ability = 0; ability < maxAbilities; ++ability)
-                {
-                    if (speciesInfo->abilities[ability] == partyData[i].ability)
-                        break;
-                }
-                if (ability >= maxAbilities)
-                    ability = 0;
+                ability = partyData[i].ability;
+                SetMonData(&party[i], MON_DATA_ABILITY_NUM, &ability);
             }
             else if (B_TRAINER_MON_RANDOM_ABILITY)
             {
@@ -2292,8 +2313,20 @@ u8 CreateNPCTrainerPartyFromTrainer(struct Pokemon *party, const struct Trainer 
                 {
                     ability--;
                 }
+                u16 value = speciesInfo->abilities[ability];
+                SetMonData(&party[i], MON_DATA_ABILITY_NUM, &value);
             }
-            SetMonData(&party[i], MON_DATA_ABILITY_NUM, &ability);
+            else
+            {
+                const struct SpeciesInfo *speciesInfo = &gSpeciesInfo[partyData[i].species];
+                ability = personalityHash % 2;
+                while (speciesInfo->abilities[ability] == ABILITY_NONE)
+                {
+                    ability--;
+                }
+                u16 value = speciesInfo->abilities[ability];
+                SetMonData(&party[i], MON_DATA_ABILITY_NUM, &value);
+            }
             SetMonData(&party[i], MON_DATA_FRIENDSHIP, &(partyData[i].friendship));
             if (partyData[i].ball != ITEM_NONE)
             {

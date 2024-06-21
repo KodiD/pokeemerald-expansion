@@ -1452,12 +1452,6 @@ void ItemUseOutOfBattle_IVStone(u8 taskId){
     SetUpItemUseCallback(taskId);
 }
 
-void ItemUseOutOfBattle_LevelStone(u8 taskId){
-    gTasks[taskId].tEnigmaBerryType = ITEM_USE_PARTY_MENU;
-    gItemUseCB = ItemUseCB_LevelStone;
-    SetUpItemUseCallback(taskId);
-}
-
 static void ItemUseOnFieldCB_Honey(u8 taskId)
 {
     Overworld_ResetStateAfterDigEscRope();

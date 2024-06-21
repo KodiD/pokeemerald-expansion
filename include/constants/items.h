@@ -999,11 +999,13 @@
 #define ITEM_POKESHI_DOLL 827
 #define ITEM_REPEL_CHARM 828  // ReOrganize later
 #define ITEM_LEVEL_STONE 829  // ReOrganize later
+#define ITEM_EXP_CAP_CORE_RE 830  // ReOrganize later
+#define ITEM_EXP_CAP_CORE 831
 
 // HOPO BERRY
 // LEGEND PLATE
 
-#define ITEMS_COUNT 830
+#define ITEMS_COUNT 832
 #define ITEM_FIELD_ARROW ITEMS_COUNT
 
 // A special item id associated with "Cancel"/"Exit" etc. in a list of items or decorations
@@ -1058,6 +1060,7 @@
 #define EXP_3000  3
 #define EXP_10000 4
 #define EXP_30000 5
+#define EXP_X 6
 
 // Item type IDs (used to determine the exit callback)
 #define ITEM_USE_MAIL             0

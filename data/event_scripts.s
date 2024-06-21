@@ -1073,3 +1073,11 @@ EventScript_VsSeekerChargingDone::
 	.include "data/maps/NewMap1/scripts.inc"
 
 	.include "data/maps/StartingCave/scripts.inc"
+
+	.include "data/maps/NewMap0/scripts.inc"
+
+	.include "data/maps/NewMap2/scripts.inc"
+
+	.include "data/maps/NewMap3/scripts.inc"
+
+	.include "data/maps/NewMap4Left/scripts.inc"

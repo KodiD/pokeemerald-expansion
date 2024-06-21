@@ -304,8 +304,6 @@ PlayersHouse_2F_Text_ItsAGameCube:
 	.string "serve as the Controller.$"
 
 PlayersHouse_2F_TeleportToStart::
-	warp MAP_STARTING_CAVE, 8, 9
-	release
 	end
 
 PlayersHouse_2F_TotemTest::
@@ -314,3 +312,6 @@ PlayersHouse_2F_TotemTest::
 	dowildbattle
     end
 
+PlayersHouse_TrainerBattle::
+	trainerbattle_single TRAINER_TEST, PlayersHouse_2F_Text_ItsAGameCube, Common_Text_LookCloserAtMap
+	end

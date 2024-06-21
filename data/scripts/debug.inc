@@ -433,24 +433,6 @@ Debug_EventScript_InflictStatus1_Text_Frostbite:
 
 .endif
 
-ExtraOp_EventScript_EXP_On::
-	msgbox ExpGainText_On, MSGBOX_DEFAULT
-	waitmessage
-	release
-	end
-
-ExpGainText_On:
-	.string "EXP. Gain is turned on.$"
-
-ExtraOp_EventScript_EXP_Off::
-	msgbox ExpGainText_Off, MSGBOX_DEFAULT
-	waitmessage
-	release
-	end
-
-ExpGainText_Off:
-	.string "EXP. Gain is turned off.$"
-
 ExtraOp_EventScript_HealingNoCharge::
 	msgbox NoHealingText, MSGBOX_DEFAULT
 	waitmessage
@@ -473,13 +455,30 @@ RemainingChargesText:
 	.string "Your Party was Healed!\n" 
 	.string "You have {STR_VAR_1} charges left. $"
 
-ExtraOp_EventScript_DEBUGTEXT::
-	
-	buffernumberstring STR_VAR_1, VAR_WILD_BOSS_AB_0x40FD  
-	msgbox DebugTextTest, MSGBOX_DEFAULT
+ExtraOp_EventScript_RepelOn::
+	msgbox ExtraRepelOnText, MSGBOX_DEFAULT
 	waitmessage
 	release
 	end
 
-DebugTextTest:
-	.string "{STR_VAR_1} $"
+ExtraOp_EventScript_RepelOff::
+	msgbox ExtraRepelOffText, MSGBOX_DEFAULT
+	waitmessage
+	release
+	end
+
+ExtraRepelOnText:
+	.string "Repel Charm is turned on. $"
+
+ExtraRepelOffText:
+	.string "Repel Charm is turned off. $"
+
+Debug_Warp_MyMaps::
+	warp MAP_NEW_MAP0, 25, 11
+	release
+	end
+	
+Debug_Warp_MainGame::
+	warp MAP_LITTLEROOT_TOWN_BRENDANS_HOUSE_2F, 6, 3
+	release
+	end

@@ -45,6 +45,7 @@ gReservedSpritePaletteCount:
 	.include "fieldmap.o"
 	.include "field_camera.o"
 	.include "field_control_avatar.o"
+	.include "extraop.o"
 	.include "start_menu.o"
 	.include "sound.o"
 	.include "task.o"
